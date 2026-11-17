@@ -271,13 +271,13 @@ try {
       <h3>The amounts</h3>
       <dl>
         <dt>Monthly base salary</dt>
-        <dd>Annual pay ÷ 14. If your annual pay covers only 12 payments, without the holiday and Christmas bonuses, it is ÷ 12 instead.</dd>
+        <dd>Annual pay ÷ 14. If your annual pay covers only 12 payments, without the holiday and Christmas bonuses, it is ÷ 12 instead. If you tick the shift allowance box, 15% is added, and every amount below uses that higher monthly pay.</dd>
         <dt>Severance for years of service</dt>
         <dd>Monthly base salary ÷ 30 gives one day of pay. Multiply it by the severance days per year (14 + 16 by default) and by the years of service. Part-years count proportionally.</dd>
         <dt>Additional severance</dt>
         <dd>The fixed amount you enter, added as it is.</dd>
         <dt>Unused vacation</dt>
-        <dd>Vacation days left × the value of one day. One day is base salary ÷ 30, or ÷ 22 working days if you choose that.</dd>
+        <dd>Vacation days left × the value of one day. One day is monthly pay × 12 ÷ 260.</dd>
         <dt>Unused training hours</dt>
         <dd>Training hours owed × the hourly rate. The hourly rate is base salary × 12 ÷ (52 × weekly working hours).</dd>
         <dt>Holiday bonus</dt>
@@ -337,6 +337,10 @@ try {
           </select>
           <span class="hint" id="monthlyHint"></span>
         </div>
+        <label class="check" for="diu">
+          <input type="checkbox" id="diu">
+          <span>Add 15% to the base salary as <strong>Shift Allowance</strong></span>
+        </label>
       </fieldset>
 
       <fieldset>
@@ -351,14 +355,7 @@ try {
             <input type="number" id="train" min="0" step="0.5" value="0" inputmode="decimal">
           </div>
         </div>
-        <div class="field">
-          <label for="divisor">Value of one vacation day</label>
-          <select id="divisor">
-            <option value="30" selected>Base salary ÷ 30</option>
-            <option value="22">Base salary ÷ 22 working days</option>
-          </select>
-          <span class="hint">Training hours are paid at base salary × 12 ÷ (52 × weekly hours).</span>
-        </div>
+        <span class="hint" style="display:block;margin:0 0 14px;">One vacation day is monthly pay × 12 ÷ 260. Training hours are paid at monthly pay × 12 ÷ (52 × weekly hours).</span>
       </fieldset>
 
       <fieldset>
@@ -599,8 +596,12 @@ try {
     var end = parseDate($("end").value);
     var annualPay = val("annualPay");
     var payments = parseInt($("payments").value, 10) || 14;
-    var salary = annualPay / payments;
-    $("monthlyHint").textContent = annualPay > 0 ? "Monthly base salary: " + cur.format(salary) : "";
+    var baseMonthly = annualPay / payments;
+    var diu = $("diu").checked ? baseMonthly * 0.15 : 0;
+    var salary = baseMonthly + diu;
+    $("monthlyHint").textContent = annualPay > 0
+      ? "Monthly base salary: " + cur.format(baseMonthly) + (diu > 0 ? ", plus " + cur.format(diu) + " shift allowance = " + cur.format(salary) : "")
+      : "";
 
     if (!start || !end || !(salary > 0)) { show("empty"); return; }
     if (isBefore(end, start)) { show("error"); return; }
@@ -608,7 +609,6 @@ try {
     var weekly = val("weekly") || 40;
     var vacDays = val("vac");
     var trainHours = val("train");
-    var divisor = parseFloat($("divisor").value) || 30;
     var holPaid = val("holPaid");
     var xmasPaid = val("xmasPaid");
     var annualBonus = val("annualBonus");
@@ -643,7 +643,7 @@ try {
 
     // Rates
     var dailySeverance = salary / 30;
-    var vacRate = salary / divisor;
+    var vacRate = salary * 12 / 260;
     var hourly = (salary * 12) / (52 * weekly);
 
     // Gross parcels
@@ -819,7 +819,7 @@ try {
     show("result");
   }
 
-  var ids = ["start", "end", "annualPay", "payments", "weekly", "vac", "train", "divisor", "holPaid", "xmasPaid",
+  var ids = ["start", "end", "annualPay", "payments", "diu", "weekly", "vac", "train", "holPaid", "xmasPaid",
              "annualBonus", "days", "daysExtra", "extra", "extraFree", "situation", "deps", "depsDis", "disFactor", "nov"];
   ids.forEach(function (id) {
     $(id).addEventListener("input", render);
