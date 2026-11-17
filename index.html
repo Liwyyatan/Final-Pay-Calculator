@@ -172,6 +172,19 @@ try {
   .sums div { display: flex; justify-content: space-between; gap: 16px; font-size: 15px; font-variant-numeric: tabular-nums; }
   .sums .lead { font-weight: 600; }
   .sums .minus { color: var(--muted); }
+  .pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px 16px; margin: 0 0 14px; }
+  .pair .cap { display: block; font-size: 13px; color: var(--muted); }
+  .pair .big { display: block; font-family: "Newsreader", Georgia, "Times New Roman", serif; font-size: 26px; line-height: 1.2; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .pair .post .big { color: var(--accent); }
+  .bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--soft); margin: 0 0 8px; }
+  .bar i { display: block; height: 100%; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 18px; font-size: 12.5px; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; }
+  .seg-net { background: var(--accent); }
+  .seg-ss { background: var(--muted); }
+  .seg-irs { background: var(--ink); opacity: 0.55; }
+  .seg-oth { background: var(--ink); opacity: 0.25; }
 
   .total { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-top: 14px; padding-top: 16px; border-top: 2px solid var(--ink); }
   .total .name { font-weight: 600; }
@@ -302,8 +315,12 @@ try {
         </div>
         <div class="field">
           <label for="extra">Additional severance (€)</label>
-          <input type="number" id="extra" min="0" step="0.01" value="6468" inputmode="decimal">
+          <input type="number" id="extra" min="0" step="0.01" value="6648" inputmode="decimal">
         </div>
+        <label class="check" for="extraFree">
+          <input type="checkbox" id="extraFree">
+          <span>Take the additional severance out of all deductions (no IRS, no Social Security, left out of the additional deduction)</span>
+        </label>
       </fieldset>
 
       <fieldset>
@@ -368,10 +385,18 @@ try {
         <p class="error" role="alert">The contract end date is before the start date.</p>
       </div>
       <div id="result" hidden>
+        <div class="pair">
+          <div class="pre"><span class="cap">Before deductions</span><span class="big" id="p-pre"></span></div>
+          <div class="post"><span class="cap">After deductions</span><span class="big" id="p-post"></span></div>
+        </div>
+        <div class="bar" id="bar" aria-hidden="true"></div>
+        <div class="legend" id="legend"></div>
         <dl class="facts">
           <div><dt>Length of service</dt><dd id="f-service"></dd></div>
           <div><dt id="f-months-label">Months worked this year</dt><dd id="f-months"></dd></div>
+          <div><dt>Average monthly regular pay</dt><dd id="f-avg"></dd></div>
           <div><dt>IRS-exempt severance limit</dt><dd id="f-limit"></dd></div>
+          <div><dt>Severance above the limit, taxed</dt><dd id="f-taxable"></dd></div>
         </dl>
         <ul class="items" id="items"></ul>
 
@@ -392,7 +417,7 @@ try {
 
         <details class="how">
           <summary>How the deductions are estimated</summary>
-          <p>Social Security is the employee’s 11% on pay items. Severance from a collective dismissal is outside the Social Security base, so it carries no contribution.</p>
+          <p>Social Security is the employee’s 11% on pay items, except the unused training hours. Severance from a collective dismissal is outside the Social Security base, so it carries no contribution. If you tick the option to take the additional severance out of all deductions, it also gets no IRS and is left out of the additional deduction.</p>
           <p>IRS follows the 2026 mainland withholding tables (Despacho 233-A/2026). The holiday and Christmas bonuses are withheld on their own. Vacation pay, training pay, the annual bonus and any taxable severance are added to the month’s salary, which is assumed to be paid in the same payment, so they are withheld at a higher rate.</p>
           <p>The severance is exempt from IRS up to average monthly regular pay × years of service. The exemption is lost, for example, if the person works for the same employer again within 24 months.</p>
           <p>The additional deduction is applied to the total you choose and does not change the Social Security or IRS estimate.</p>
@@ -410,6 +435,7 @@ try {
   var $ = function (id) { return document.getElementById(id); };
   var cur = new Intl.NumberFormat(undefined, { style: "currency", currency: "EUR" });
   var num = new Intl.NumberFormat(undefined, { maximumFractionDigits: 2 });
+  var pct = new Intl.NumberFormat(undefined, { maximumFractionDigits: 1 });
   var r2 = function (x) { return Math.round((x + Number.EPSILON) * 100) / 100; };
   var MINUS = "\u2212";
   var SS_RATE = 0.11;
@@ -524,6 +550,7 @@ try {
     var daysExtraPerYear = val("daysExtra");
     var daysPerYear = daysBase + daysExtraPerYear;
     var extra = val("extra");
+    var extraFree = $("extraFree").checked;
 
     var depsTotal = Math.floor(val("deps"));
     var depsDis = Math.floor(val("depsDis"));
@@ -567,7 +594,7 @@ try {
     var avgMonthly = val("avg") || (salary * 14 / 12);
     var limit = avgMonthly * years;
     var mainTax = r2(Math.max(0, severance - limit));
-    var addTax = r2(Math.max(0, extraAmt - Math.max(0, limit - severance)));
+    var addTax = extraFree ? 0 : r2(Math.max(0, extraAmt - Math.max(0, limit - severance)));
     var compSS = false; // collective dismissal: severance is outside the Social Security base
 
     var bonusNote = function (paid) {
@@ -587,14 +614,15 @@ try {
         extraNote: taxNote(mainTax),
         gross: severance, ss: compSS ? severance : 0, tax: mainTax, kind: "stack" },
       { name: "Additional severance", note: "Agreed amount",
-        extraNote: taxNote(addTax),
-        gross: extraAmt, ss: compSS ? extraAmt : 0, tax: addTax, kind: "stack" },
+        extraNote: extraFree ? "Excluded from all deductions" : taxNote(addTax),
+        gross: extraAmt, ss: (compSS && !extraFree) ? extraAmt : 0, tax: addTax, kind: "stack" },
       { name: "Unused vacation",
         note: num.format(vacDays) + " days × " + cur.format(vacRate),
         gross: vacPay, ss: vacPay, tax: vacPay, kind: "stack" },
       { name: "Unused training hours",
         note: num.format(trainHours) + " hours × " + cur.format(hourly),
-        gross: trainPay, ss: trainPay, tax: trainPay, kind: "stack" },
+        extraNote: "Not subject to Social Security",
+        gross: trainPay, ss: 0, tax: trainPay, kind: "stack" },
       { name: "Holiday bonus, pro-rata", note: bonusNote(holPaid),
         gross: holiday, ss: holiday, kind: "own" },
       { name: "Christmas bonus, pro-rata", note: bonusNote(xmasPaid),
@@ -624,15 +652,17 @@ try {
     var tGross = sum("gross"), tSS = sum("ssAmt"), tIRS = sum("irsAmt"), tNet = sum("net");
     var otherPct = val("otherPct");
     var otherOnNet = $("otherBase").value === "net";
-    var otherLabel = "Additional deduction (" + num.format(otherPct) + "% of " + (otherOnNet ? "net" : "gross total") + ")";
-    var tOther = r2((otherOnNet ? tNet : tGross) * otherPct / 100);
+    var otherLabel = "Additional deduction (" + num.format(otherPct) + "% of " + (otherOnNet ? "net" : "gross total") + (extraFree ? ", without the additional severance" : "") + ")";
+    var tOther = r2(Math.max(0, (otherOnNet ? tNet : tGross) - (extraFree ? extraAmt : 0)) * otherPct / 100);
     var tFinal = r2(tNet - tOther);
 
     $("f-service").textContent = plural(y, "year") + ", " + plural(m, "month") + ", " + plural(d, "day") +
       " (" + num.format(years) + " years)";
     $("f-months-label").textContent = "Months worked in " + end.y;
     $("f-months").textContent = num.format(months) + " of 12";
+    $("f-avg").textContent = cur.format(avgMonthly);
     $("f-limit").textContent = cur.format(limit);
+    $("f-taxable").textContent = cur.format(r2(mainTax + addTax));
 
     var list = $("items");
     list.innerHTML = "";
@@ -666,6 +696,28 @@ try {
     $("t-other").textContent = neg(tOther);
     $("total").textContent = cur.format(tFinal);
 
+    $("p-pre").textContent = cur.format(tGross);
+    $("p-post").textContent = cur.format(tFinal);
+    var bar = $("bar"), legend = $("legend");
+    bar.innerHTML = "";
+    legend.innerHTML = "";
+    if (tGross > 0) {
+      [["seg-net", "Net", tFinal], ["seg-ss", "Social Security", tSS], ["seg-irs", "IRS", tIRS], ["seg-oth", "Other deduction", tOther]].forEach(function (s) {
+        if (!(s[2] > 0)) return;
+        var share = s[2] / tGross * 100;
+        var seg = document.createElement("i");
+        seg.className = s[0];
+        seg.style.width = share + "%";
+        bar.appendChild(seg);
+        var entry = document.createElement("span");
+        var sw = document.createElement("i");
+        sw.className = s[0];
+        entry.appendChild(sw);
+        entry.appendChild(document.createTextNode(s[1] + " " + pct.format(share) + "%"));
+        legend.appendChild(entry);
+      });
+    }
+
     lastText = "Final account\n" +
       "Length of service: " + $("f-service").textContent + "\n" +
       "Months worked in " + end.y + ": " + num.format(months) + " of 12\n" +
@@ -684,7 +736,7 @@ try {
   }
 
   var ids = ["start", "end", "annualPay", "payments", "weekly", "vac", "train", "divisor", "holPaid", "xmasPaid",
-             "annualBonus", "days", "daysExtra", "extra", "situation", "otherPct", "otherBase", "deps", "depsDis", "disFactor", "avg", "nov"];
+             "annualBonus", "days", "daysExtra", "extra", "extraFree", "situation", "otherPct", "otherBase", "deps", "depsDis", "disFactor", "avg", "nov"];
   ids.forEach(function (id) {
     $(id).addEventListener("input", render);
     $(id).addEventListener("change", render);
