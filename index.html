@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Final pay calculator</title>
-<link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT37UNnLcfkL0RqYe7Xs6xELwag1CJB08AsHuZycqyYzhx5R-8rcfegZvY">
+<link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT37UNnLcfkL0RqYe7Xs6xELwag1CJB08AsHuZycqyYzhx5R-8rcfegZvY">
 <link rel="apple-touch-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT37UNnLcfkL0RqYe7Xs6xELwag1CJB08AsHuZycqyYzhx5R-8rcfegZvY">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -85,12 +85,13 @@ try {
   .explain[open] summary::after { transform: rotate(-135deg); }
   .explain .body { padding: 4px 18px 20px; border-top: 1px solid var(--line); }
   .explain h3 { margin: 18px 0 0; font-size: 15px; font-weight: 600; }
-  .explain dl { margin: 10px 0 0; display: grid; grid-template-columns: minmax(150px, 220px) minmax(0, 1fr); gap: 10px 20px; font-size: 14.5px; }
-  .explain dt { font-weight: 500; }
-  .explain dd { margin: 0; color: var(--muted); }
+  .explain dl { margin: 10px 0 0; display: grid; grid-template-columns: minmax(150px, 220px) minmax(0, 1fr); gap: 0; font-size: 14.5px; border-top: 1px solid var(--line); }
+  .explain dt { font-weight: 500; padding: 11px 20px 11px 0; border-bottom: 1px solid var(--line); }
+  .explain dd { margin: 0; padding: 11px 0; color: var(--muted); border-bottom: 1px solid var(--line); }
   @media (max-width: 640px) {
-    .explain dl { grid-template-columns: minmax(0, 1fr); gap: 2px; }
-    .explain dd { margin-bottom: 10px; }
+    .explain dl { grid-template-columns: minmax(0, 1fr); }
+    .explain dt { padding: 11px 0 0; border-bottom: 0; }
+    .explain dd { padding: 2px 0 11px; }
   }
   .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
   .theme-toggle {
