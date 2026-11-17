@@ -294,13 +294,13 @@ try {
         <dt>Social Security</dt>
         <dd>11% of the amounts that count as pay: unused vacation, holiday bonus, Christmas bonus and annual bonus. Nothing is taken from the severance or from the training hours.</dd>
         <dt>IRS on the severance</dt>
-        <dd>Severance is tax-free up to your average monthly regular pay × years of service. Only the part above that limit is taxed. You can also take the additional severance out of IRS and Social Security with the checkbox.</dd>
+        <dd>Severance is tax-free up to your average monthly regular pay (base salary × 14 ÷ 12) × years of service. Only the part above that limit is taxed. You can also take the additional severance out of IRS and Social Security with the checkbox.</dd>
         <dt>IRS on everything else</dt>
         <dd>Estimated with the 2026 Portuguese withholding table. The holiday and Christmas bonuses are taxed on their own. Vacation, training, the annual bonus and any taxed severance are added on top of the month’s salary, so they are taxed at a higher rate. Dependents and the disability factor lower the result. It is an advance, and the final tax is settled in the annual return.</dd>
-        <dt>Additional deduction</dt>
-        <dd>The percentage you set (2.5% by default) of the total before deductions.</dd>
+        <dt>Lawyer’s fee</dt>
+        <dd>A fixed 2.5% of the total before deductions.</dd>
         <dt>After deductions</dt>
-        <dd>Before deductions − Social Security − IRS − additional deduction.</dd>
+        <dd>Before deductions − Social Security − IRS − lawyer’s fee.</dd>
       </dl>
     </div>
   </details>
@@ -426,18 +426,6 @@ try {
           </div>
         </div>
         <span class="hint" style="display:block;margin:-4px 0 16px;">Each of them adds €84.82 a month to the amount deducted from the withholding (€42.41 if married with two incomes). Your employer can multiply it by up to 3, or up to 6 if married with two incomes. Use a factor of at least 1 for the reduction to apply.</span>
-        <div class="row">
-          <div class="field">
-            <label for="otherPct">Additional deduction (%)</label>
-            <input type="number" id="otherPct" min="0" max="100" step="0.01" value="2.5" inputmode="decimal">
-            <span class="hint">Applied to the total of the whole package.</span>
-          </div>
-        </div>
-        <div class="field">
-          <label for="avg">Average monthly regular pay, last 12 months (€)</label>
-          <input type="number" id="avg" min="0" step="0.01" inputmode="decimal" placeholder="Base salary × 14 ÷ 12">
-          <span class="hint">Sets the IRS-exempt part of the severance. Leave blank to use base salary × 14 ÷ 12. Add the annual bonus ÷ 12 if it is regular pay.</span>
-        </div>
         <label class="check" for="nov">
           <input type="checkbox" id="nov">
           <span>Paid in November 2026 (IRS withholding is halved this month)</span>
@@ -495,10 +483,10 @@ try {
 
         <details class="how">
           <summary>How the deductions are estimated</summary>
-          <p>Social Security is the employee’s 11% on pay items, except the unused training hours. Severance from a collective dismissal is outside the Social Security base, so it carries no contribution. If you tick the option to take the additional severance out of IRS and Social Security, it gets no IRS. The additional deduction still applies to the total of the whole package.</p>
+          <p>Social Security is the employee’s 11% on pay items, except the unused training hours. Severance from a collective dismissal is outside the Social Security base, so it carries no contribution. If you tick the option to take the additional severance out of IRS and Social Security, it gets no IRS. The lawyer’s fee still applies to the total of the whole package.</p>
           <p>IRS follows the 2026 mainland withholding tables (Despacho 233-A/2026). The holiday and Christmas bonuses are withheld on their own. Vacation pay, training pay, the annual bonus and any taxable severance are added to the month’s salary, which is assumed to be paid in the same payment, so they are withheld at a higher rate.</p>
           <p>The severance is exempt from IRS up to average monthly regular pay × years of service. The exemption is lost, for example, if the person works for the same employer again within 24 months.</p>
-          <p>The additional deduction is applied to the total of the whole package and does not change the Social Security or IRS estimate.</p>
+          <p>The lawyer’s fee is a fixed 2.5% of the total of the whole package and does not change the Social Security or IRS estimate.</p>
           <p>For each dependent with a disability of 60% or more, €84.82 a month (€42.41 if married with two incomes) is added to the amount deducted from the withholding. Your employer can multiply it by up to 3, or up to 6 if married with two incomes, and the calculator uses the factor you enter.</p>
           <p>Not covered: the Azores and Madeira tables, the tables for taxpayers who have a disability themselves, IRS Jovem, and the separate exemption for voluntary performance bonuses. Withholding is an advance, and the final tax is settled in the annual return.</p>
         </details>
@@ -669,7 +657,7 @@ try {
     var annual = r2(annualBonus);
 
     // IRS exemption on severance
-    var avgMonthly = val("avg") || (salary * 14 / 12);
+    var avgMonthly = salary * 14 / 12;
     var limit = avgMonthly * years;
     var mainTax = r2(Math.max(0, severance - limit));
     var addTax = extraFree ? 0 : r2(Math.max(0, extraAmt - Math.max(0, limit - severance)));
@@ -728,8 +716,8 @@ try {
 
     var sum = function (key) { return r2(items.reduce(function (s, it) { return s + it[key]; }, 0)); };
     var tGross = sum("gross"), tSS = sum("ssAmt"), tIRS = sum("irsAmt"), tNet = sum("net");
-    var otherPct = val("otherPct");
-    var otherLabel = "Additional deduction (" + num.format(otherPct) + "% of the total package)";
+    var otherPct = 2.5; // lawyer’s fee: fixed, not editable
+    var otherLabel = "Lawyer’s fee (" + num.format(otherPct) + "% of the total package)";
     var tOther = r2(tGross * otherPct / 100);
     var tFinal = r2(tNet - tOther);
 
@@ -798,7 +786,7 @@ try {
     bar.innerHTML = "";
     legend.innerHTML = "";
     if (tGross > 0) {
-      [["seg-net", "Net", tFinal], ["seg-ss", "Social Security", tSS], ["seg-irs", "IRS", tIRS], ["seg-oth", "Other deduction", tOther]].forEach(function (s) {
+      [["seg-net", "Net", tFinal], ["seg-ss", "Social Security", tSS], ["seg-irs", "IRS", tIRS], ["seg-oth", "Lawyer’s fee", tOther]].forEach(function (s) {
         if (!(s[2] > 0)) return;
         var share = s[2] / tGross * 100;
         var seg = document.createElement("i");
@@ -832,7 +820,7 @@ try {
   }
 
   var ids = ["start", "end", "annualPay", "payments", "weekly", "vac", "train", "divisor", "holPaid", "xmasPaid",
-             "annualBonus", "days", "daysExtra", "extra", "extraFree", "situation", "otherPct", "deps", "depsDis", "disFactor", "avg", "nov"];
+             "annualBonus", "days", "daysExtra", "extra", "extraFree", "situation", "deps", "depsDis", "disFactor", "nov"];
   ids.forEach(function (id) {
     $(id).addEventListener("input", render);
     $(id).addEventListener("change", render);
