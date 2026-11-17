@@ -42,14 +42,14 @@ try {
     }
   }
   :root[data-theme="dark"] {
-      --bg: #161616;
-      --paper: #1F1F1F;
-      --ink: #EBEBEB;
-      --muted: #A0A0A0;
-      --accent: #8DB0FF;
-      --line: #383838;
-      --soft: #292929;
-      --danger: #FF8A80;
+    --bg: #161616;
+    --paper: #1F1F1F;
+    --ink: #EBEBEB;
+    --muted: #A0A0A0;
+    --accent: #8DB0FF;
+    --line: #383838;
+    --soft: #292929;
+    --danger: #FF8A80;
     color-scheme: dark;
   }
   html { scroll-padding-top: env(safe-area-inset-top, 0px); }
@@ -288,10 +288,6 @@ try {
           <label for="annualBonus">Annual bonus (€)</label>
           <input type="number" id="annualBonus" min="0" step="0.01" value="0" inputmode="decimal">
         </div>
-        <label class="check" for="prorata">
-          <input type="checkbox" id="prorata" checked>
-          <span>Pro-rate the annual bonus for the months worked this year</span>
-        </label>
         <div class="row">
           <div class="field">
             <label for="days">Severance days per year of service</label>
@@ -522,7 +518,6 @@ try {
     var holPaid = val("holPaid");
     var xmasPaid = val("xmasPaid");
     var annualBonus = val("annualBonus");
-    var prorata = $("prorata").checked;
     var daysBase = val("days");
     var daysExtraPerYear = val("daysExtra");
     var daysPerYear = daysBase + daysExtraPerYear;
@@ -564,7 +559,7 @@ try {
     var bonusEntitled = r2(salary * months / 12);
     var holiday = Math.max(0, r2(bonusEntitled - holPaid));
     var xmas = Math.max(0, r2(bonusEntitled - xmasPaid));
-    var annual = r2(prorata ? annualBonus * months / 12 : annualBonus);
+    var annual = r2(annualBonus);
 
     // IRS exemption on severance
     var avgMonthly = val("avg") || (salary * 14 / 12);
@@ -603,7 +598,7 @@ try {
       { name: "Christmas bonus, pro-rata", note: bonusNote(xmasPaid),
         gross: xmas, ss: xmas, kind: "own" },
       { name: "Annual bonus",
-        note: prorata ? num.format(months) + "/12 of " + cur.format(annualBonus) : "Full amount",
+        note: "Paid in full",
         gross: annual, ss: annual, tax: annual, kind: "stack" }
     ];
 
@@ -687,7 +682,7 @@ try {
   }
 
   var ids = ["start", "end", "annualPay", "payments", "weekly", "vac", "train", "divisor", "holPaid", "xmasPaid",
-             "annualBonus", "prorata", "days", "daysExtra", "extra", "situation", "otherPct", "otherBase", "deps", "depsDis", "disFactor", "avg", "nov"];
+             "annualBonus", "days", "daysExtra", "extra", "situation", "otherPct", "otherBase", "deps", "depsDis", "disFactor", "avg", "nov"];
   ids.forEach(function (id) {
     $(id).addEventListener("input", render);
     $(id).addEventListener("change", render);
