@@ -185,6 +185,16 @@ try {
   .seg-ss { background: var(--muted); }
   .seg-irs { background: var(--ink); opacity: 0.55; }
   .seg-oth { background: var(--ink); opacity: 0.25; }
+  .rates-title { font-size: 15px; font-weight: 600; margin: 22px 0 2px; }
+  .rates-note { margin: 0 0 8px; font-size: 13px; color: var(--muted); line-height: 1.4; }
+  .rates-wrap { overflow-x: auto; }
+  .rates { width: 100%; border-collapse: collapse; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+  .rates th, .rates td { padding: 6px 0; text-align: right; border-bottom: 1px solid var(--soft); }
+  .rates thead th { font-weight: 500; color: var(--muted); font-size: 12.5px; }
+  .rates th:first-child, .rates td:first-child { text-align: left; }
+  .rates tbody th { font-weight: 400; padding-right: 12px; }
+  .rates td { padding-left: 12px; white-space: nowrap; }
+  .rates tr.sum th, .rates tr.sum td { font-weight: 600; border-bottom: 0; border-top: 1px solid var(--line); }
 
   .total { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-top: 14px; padding-top: 16px; border-top: 2px solid var(--ink); }
   .total .name { font-weight: 600; }
@@ -315,7 +325,7 @@ try {
         </div>
         <div class="field">
           <label for="extra">Additional severance (€)</label>
-          <input type="number" id="extra" min="0" step="0.01" value="6648" inputmode="decimal">
+          <input type="number" id="extra" min="0" step="0.01" value="6468" inputmode="decimal">
         </div>
         <label class="check" for="extraFree">
           <input type="checkbox" id="extraFree">
@@ -337,20 +347,20 @@ try {
           </div>
           <div class="field">
             <label for="deps">Dependents</label>
-            <input type="number" id="deps" min="0" step="1" value="1" inputmode="numeric">
+            <input type="number" id="deps" min="0" step="1" value="0" inputmode="numeric">
           </div>
         </div>
         <div class="row">
           <div class="field">
             <label for="depsDis">Dependents with a disability of 60% or more</label>
-            <input type="number" id="depsDis" min="0" step="1" value="1" inputmode="numeric">
+            <input type="number" id="depsDis" min="0" step="1" value="0" inputmode="numeric">
           </div>
           <div class="field">
             <label for="disFactor">Disability factor</label>
-            <input type="number" id="disFactor" min="1" max="6" step="1" value="3" inputmode="numeric">
+            <input type="number" id="disFactor" min="0" max="6" step="1" value="0" inputmode="numeric">
           </div>
         </div>
-        <span class="hint" style="display:block;margin:-4px 0 16px;">Each of them adds €84.82 a month to the amount deducted from the withholding (€42.41 if married with two incomes). Your employer can multiply it by up to 3, or up to 6 if married with two incomes.</span>
+        <span class="hint" style="display:block;margin:-4px 0 16px;">Each of them adds €84.82 a month to the amount deducted from the withholding (€42.41 if married with two incomes). Your employer can multiply it by up to 3, or up to 6 if married with two incomes. Use a factor of at least 1 for the reduction to apply.</span>
         <div class="row">
           <div class="field">
             <label for="otherPct">Additional deduction (%)</label>
@@ -409,6 +419,15 @@ try {
         <div class="total">
           <span class="name">Estimated net</span>
           <span class="amt" id="total"></span>
+        </div>
+
+        <h3 class="rates-title">Deduction rates</h3>
+        <p class="rates-note">Share of each parcel’s gross amount taken out. IRS is an estimated withholding rate.</p>
+        <div class="rates-wrap">
+          <table class="rates">
+            <thead><tr><th scope="col">Parcel</th><th scope="col">Social Security</th><th scope="col">IRS</th></tr></thead>
+            <tbody id="rates-body"></tbody>
+          </table>
         </div>
 
         <div class="actions">
@@ -560,7 +579,7 @@ try {
     var sit = SITUATIONS[sitKey] || SITUATIONS.single0;
     var deps = sit.useDeps ? depsTotal : 0;
     var twoIncomes = sitKey === "marriedTwo";
-    var disFactor = Math.min(twoIncomes ? 6 : 3, Math.max(1, Math.floor(val("disFactor")) || 1));
+    var disFactor = Math.min(twoIncomes ? 6 : 3, Math.floor(val("disFactor")));
     var addon = sit.useDeps ? depsDis * (twoIncomes ? 42.41 : 84.82) * disFactor : 0;
     var halved = $("nov").checked;
 
@@ -698,6 +717,25 @@ try {
 
     $("p-pre").textContent = cur.format(tGross);
     $("p-post").textContent = cur.format(tFinal);
+
+    var rb = $("rates-body");
+    rb.innerHTML = "";
+    var addRateRow = function (label, g, ssA, irsA, isTotal) {
+      var tr = document.createElement("tr");
+      if (isTotal) tr.className = "sum";
+      var cells = [label,
+        g > 0 ? pct.format(ssA / g * 100) + "%" : "\u2013",
+        g > 0 ? pct.format(irsA / g * 100) + "%" : "\u2013"];
+      cells.forEach(function (t, i) {
+        var cell = document.createElement(i === 0 ? "th" : "td");
+        if (i === 0) cell.setAttribute("scope", "row");
+        cell.textContent = t;
+        tr.appendChild(cell);
+      });
+      rb.appendChild(tr);
+    };
+    items.forEach(function (it) { addRateRow(it.name, it.gross, it.ssAmt, it.irsAmt, false); });
+    addRateRow("Total", tGross, tSS, tIRS, true);
     var bar = $("bar"), legend = $("legend");
     bar.innerHTML = "";
     legend.innerHTML = "";
