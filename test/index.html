@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>TEST calculator</title>
+<title>Final pay calculator</title>
 <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT37UNnLcfkL0RqYe7Xs6xELwag1CJB08AsHuZycqyYzhx5R-8rcfegZvY">
 <link rel="apple-touch-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT37UNnLcfkL0RqYe7Xs6xELwag1CJB08AsHuZycqyYzhx5R-8rcfegZvY">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -88,6 +88,12 @@ try {
   .explain dl { margin: 10px 0 0; display: grid; grid-template-columns: minmax(150px, 220px) minmax(0, 1fr); gap: 0; font-size: 14.5px; border-top: 1px solid var(--line); }
   .explain dt { font-weight: 500; padding: 11px 20px 11px 0; border-bottom: 1px solid var(--line); }
   .explain dd { margin: 0; padding: 11px 0; color: var(--muted); border-bottom: 1px solid var(--line); }
+  .updates { margin-bottom: 14px; }
+  .updates dl { margin-top: 4px; border-top: 0; }
+  .explain .ver { margin-left: auto; margin-right: 10px; font-size: 13px; font-weight: 500; color: var(--muted); }
+  .explain dd ul { margin: 0; padding-left: 18px; }
+  .explain dd li { margin: 0 0 5px; }
+  .explain dd li:last-child { margin-bottom: 0; }
   @media (max-width: 640px) {
     .explain dl { grid-template-columns: minmax(0, 1fr); }
     .explain dt { padding: 11px 0 0; border-bottom: 0; }
@@ -269,10 +275,73 @@ try {
 </div>
 <div class="wrap">
   <div class="top">
-    <h1>TEST CALCULATOR</h1>
+    <h1>Final pay calculator</h1>
     <button type="button" class="theme-toggle" id="theme"></button>
   </div>
   <p class="lede">A clear view of your end-of-contract package under Portuguese labour rules, with an estimate of Social Security and IRS for each parcel. It updates as you type.</p>
+
+  <details class="explain updates">
+    <summary><span>Updates by version</span><span class="ver">Current version 1.7</span></summary>
+    <div class="body">
+      <dl>
+        <dt>Version 1.7</dt>
+        <dd><ul>
+          <li>Lumon-style look: pale blue theme, rounder shapes and one clean font.</li>
+          <li>The totals count up when they change.</li>
+          <li>A sentence under the bar shows the package in months of pay.</li>
+          <li>This list of updates.</li>
+        </ul></dd>
+        <dt>Version 1.6</dt>
+        <dd><ul>
+          <li>New “Shift Allowance” checkbox that adds 15% to the base salary. Every amount uses the higher monthly pay.</li>
+          <li>One vacation day is now monthly pay × 12 ÷ 260, and the ÷ 30 or ÷ 22 choice is gone. Unused vacation is recalculated.</li>
+        </ul></dd>
+        <dt>Version 1.5</dt>
+        <dd><ul>
+          <li>Banner with the Discord contact for errors and suggestions.</li>
+          <li>“How every amount is calculated” menu, with lines between the items.</li>
+          <li>“Lawyer’s fee”: a fixed 2.5% of the total package that can no longer be edited.</li>
+          <li>Removed the average monthly regular pay field. The IRS-exempt limit always uses base salary × 14 ÷ 12.</li>
+          <li>Additional severance set to €6,648.</li>
+          <li>Custom page icon in the downloadable file.</li>
+        </ul></dd>
+        <dt>Version 1.4</dt>
+        <dd><ul>
+          <li>“Before deductions” and “After deductions” totals, with a bar showing where the money goes.</li>
+          <li>Training hours are no longer reduced for Social Security.</li>
+          <li>Option to take the additional severance out of IRS and Social Security.</li>
+          <li>The final account shows the average monthly regular pay, the IRS-exempt severance limit and the severance above it.</li>
+          <li>“Deduction rates” table with the Social Security and IRS percentage for each parcel.</li>
+          <li>Dependents, dependents with a disability and the disability factor start at 0.</li>
+        </ul></dd>
+        <dt>Version 1.3</dt>
+        <dd><ul>
+          <li>Dependents and the disability factor (60% or more) in the IRS withholding estimate.</li>
+          <li>Light and dark page toggle in the top right corner, with a gray dark theme.</li>
+          <li>The annual bonus is always paid in full.</li>
+        </ul></dd>
+        <dt>Version 1.2</dt>
+        <dd><ul>
+          <li>Annual pay replaces the monthly base salary, split into 14 or 12 payments.</li>
+          <li>Every case is a collective dismissal, so severance carries no Social Security.</li>
+          <li>2.5% additional deduction on the total package (renamed “Lawyer’s fee” in version 1.5).</li>
+        </ul></dd>
+        <dt>Version 1.1</dt>
+        <dd><ul>
+          <li>Severance of 14 + 16 days of pay per year of service, in two fields.</li>
+          <li>Annual bonus field.</li>
+          <li>Estimated Social Security (11%) and IRS (2026 withholding tables) for each parcel, with a net total.</li>
+          <li>IRS exemption on the severance, up to average monthly pay × years of service.</li>
+          <li>Option for payments made in November 2026, when IRS withholding is halved.</li>
+        </ul></dd>
+        <dt>Version 1.0</dt>
+        <dd><ul>
+          <li>First version: contract dates, base salary, vacation days left, training hours, holiday and Christmas bonus, and the additional severance.</li>
+          <li>Severance by years of service under Portuguese rules.</li>
+        </ul></dd>
+      </dl>
+    </div>
+  </details>
 
   <details class="explain">
     <summary>How every amount is calculated</summary>
