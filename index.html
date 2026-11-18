@@ -97,6 +97,8 @@ try {
   .explain dd { margin: 0; padding: 11px 0; color: var(--muted); border-bottom: 1px solid var(--line); }
   .updates { margin-bottom: 14px; }
   .updates dl { margin-top: 4px; border-top: 0; }
+  .updates dt.major { font-weight: 600; color: var(--accent); }
+  .updates dd.major .title { display: block; margin-bottom: 4px; font-weight: 600; color: var(--ink); }
   .explain .ver { margin-left: auto; margin-right: 10px; font-size: 13px; font-weight: 500; color: var(--muted); }
   .explain dd ul { margin: 0; padding-left: 18px; }
   .explain dd li { margin: 0 0 5px; }
@@ -390,55 +392,55 @@ try {
   </header>
 
   <details class="explain updates">
-    <summary><span>Updates by version</span><span class="ver">Current version 2.4, updated 18/11/2026 at 22:10</span></summary>
+    <summary><span>Updates by version</span><span class="ver">Current version 4.4, updated 18/11/2026 at 22:28</span></summary>
     <div class="body">
       <dl>
-        <dt>Version 2.4</dt>
+        <dt>Version 4.4</dt>
         <dd><ul>
           <li>The page starts blank on every refresh and when returning to it with the browser buttons. Browser autofill is turned off for all fields.</li>
         </ul></dd>
-        <dt>Version 2.3</dt>
+        <dt>Version 4.3</dt>
         <dd><ul>
           <li>Restyled header banner: icon, soft gradient background with a ring pattern, and small tags for the case type and the tax year.</li>
         </ul></dd>
-        <dt>Version 2.2</dt>
+        <dt>Version 4.2</dt>
         <dd><ul>
           <li>Christmas bonus fix: it is paid with the November salary, so for an end date in December only the days worked in December are calculated. For an end date in 2027 it is the pro-rata amount for 2027.</li>
           <li>Contract dates are typed as DD/MM/YYYY, with a calendar pop-up next to each date field.</li>
         </ul></dd>
-        <dt>Version 2.1</dt>
+        <dt>Version 4.1</dt>
         <dd><ul>
           <li>On larger screens the final account stays in view on the right while you scroll through the fields. If it is taller than the screen, it scrolls inside its own box.</li>
         </ul></dd>
-        <dt>Version 2.0</dt>
-        <dd><ul>
+        <dt class="major">Version 4.0</dt>
+        <dd class="major"><span class="title">Tools and checks</span><ul>
           <li>Yearly values (tax tables, limits, minimum wage) are grouped in one block at the top of the code, with a warning when the end date is not in 2026. The November option hides itself after 30 November.</li>
           <li>“Please double-check” warnings for unusual inputs, such as very high vacation days or a bonus larger than annual pay.</li>
           <li>“Print / Save as PDF” with a clean print layout and an inputs summary.</li>
           <li>“Clear all” button, with a few seconds to undo it.</li>
           <li>A sticky “After deductions” bar on phones.</li>
         </ul></dd>
-        <dt>Version 1.9</dt>
+        <dt>Version 3.2</dt>
         <dd><ul>
           <li>IRS Jovem option: tick it and choose the year of income, and the IRS estimate on the pay items is reduced by the exempt share (100%, 75%, 50% or 25%), up to the 2026 limit.</li>
         </ul></dd>
-        <dt>Version 1.8</dt>
+        <dt>Version 3.1</dt>
         <dd><ul>
           <li>Reminder under “Vacation days left” when the contract ends in 2027: add the 22 days that vest on 1 January 2027.</li>
         </ul></dd>
-        <dt>Version 1.7</dt>
-        <dd><ul>
-          <li>Lumon-style look: pale blue theme, rounder shapes and one clean font.</li>
+        <dt class="major">Version 3.0</dt>
+        <dd class="major"><span class="title">Lumon-style look</span><ul>
+          <li>Pale blue theme, rounder shapes and one clean font.</li>
           <li>The totals count up when they change.</li>
           <li>A sentence under the bar shows the package in months of pay.</li>
           <li>This list of updates.</li>
         </ul></dd>
-        <dt>Version 1.6</dt>
+        <dt>Version 2.9</dt>
         <dd><ul>
           <li>New “Shift Allowance” checkbox that adds 15% to the base salary. Every amount uses the higher monthly pay.</li>
           <li>One vacation day is now monthly pay × 12 ÷ 260, and the ÷ 30 or ÷ 22 choice is gone. Unused vacation is recalculated.</li>
         </ul></dd>
-        <dt>Version 1.5</dt>
+        <dt>Version 2.8</dt>
         <dd><ul>
           <li>Banner with the Discord contact for errors and suggestions.</li>
           <li>“How every amount is calculated” menu, with lines between the items.</li>
@@ -447,7 +449,7 @@ try {
           <li>Additional severance set to €6,648.</li>
           <li>Custom page icon in the downloadable file.</li>
         </ul></dd>
-        <dt>Version 1.4</dt>
+        <dt>Version 2.7</dt>
         <dd><ul>
           <li>“Before deductions” and “After deductions” totals, with a bar showing where the money goes.</li>
           <li>Training hours are no longer reduced for Social Security.</li>
@@ -456,29 +458,47 @@ try {
           <li>“Deduction rates” table with the Social Security and IRS percentage for each parcel.</li>
           <li>Dependents, dependents with a disability and the disability factor start at 0.</li>
         </ul></dd>
-        <dt>Version 1.3</dt>
+        <dt>Version 2.6</dt>
         <dd><ul>
-          <li>Dependents and the disability factor (60% or more) in the IRS withholding estimate.</li>
-          <li>Light and dark page toggle in the top right corner, with a gray dark theme.</li>
           <li>The annual bonus is always paid in full.</li>
         </ul></dd>
-        <dt>Version 1.2</dt>
+        <dt>Version 2.5</dt>
+        <dd><ul>
+          <li>Light and dark page toggle in the top right corner, with a gray dark theme.</li>
+        </ul></dd>
+        <dt>Version 2.4</dt>
+        <dd><ul>
+          <li>Dependents and the disability factor (60% or more) in the IRS withholding estimate.</li>
+        </ul></dd>
+        <dt>Version 2.3</dt>
+        <dd><ul>
+          <li>2.5% additional deduction on the total package (renamed “Lawyer’s fee” in version 2.8).</li>
+        </ul></dd>
+        <dt>Version 2.2</dt>
+        <dd><ul>
+          <li>Every case is a collective dismissal, so severance carries no Social Security.</li>
+        </ul></dd>
+        <dt>Version 2.1</dt>
         <dd><ul>
           <li>Annual pay replaces the monthly base salary, split into 14 or 12 payments.</li>
-          <li>Every case is a collective dismissal, so severance carries no Social Security.</li>
-          <li>2.5% additional deduction on the total package (renamed “Lawyer’s fee” in version 1.5).</li>
         </ul></dd>
-        <dt>Version 1.1</dt>
-        <dd><ul>
-          <li>Severance of 14 + 16 days of pay per year of service, in two fields.</li>
-          <li>Annual bonus field.</li>
+        <dt class="major">Version 2.0</dt>
+        <dd class="major"><span class="title">Social Security and IRS estimates</span><ul>
           <li>Estimated Social Security (11%) and IRS (2026 withholding tables) for each parcel, with a net total.</li>
           <li>IRS exemption on the severance, up to average monthly pay × years of service.</li>
           <li>Option for payments made in November 2026, when IRS withholding is halved.</li>
         </ul></dd>
-        <dt>Version 1.0</dt>
+        <dt>Version 1.2</dt>
         <dd><ul>
-          <li>First version: contract dates, base salary, vacation days left, training hours, holiday and Christmas bonus, and the additional severance.</li>
+          <li>Annual bonus field.</li>
+        </ul></dd>
+        <dt>Version 1.1</dt>
+        <dd><ul>
+          <li>Severance of 14 + 16 days of pay per year of service, in two fields.</li>
+        </ul></dd>
+        <dt class="major">Version 1.0</dt>
+        <dd class="major"><span class="title">First version</span><ul>
+          <li>Contract dates, base salary, vacation days left, training hours, holiday and Christmas bonus, and the additional severance.</li>
           <li>Severance by years of service under Portuguese rules.</li>
         </ul></dd>
       </dl>
