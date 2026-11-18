@@ -283,9 +283,13 @@ try {
   <p class="lede">A clear view of your end-of-contract package under Portuguese labour rules, with an estimate of Social Security and IRS for each parcel. It updates as you type.</p>
 
   <details class="explain updates">
-    <summary><span>Updates by version</span><span class="ver">Current version 1.8</span></summary>
+    <summary><span>Updates by version</span><span class="ver">Current version 1.9</span></summary>
     <div class="body">
       <dl>
+        <dt>Version 1.9</dt>
+        <dd><ul>
+          <li>IRS Jovem option: tick it and choose the year of income, and the IRS estimate on the pay items is reduced by the exempt share (100%, 75%, 50% or 25%), up to the 2026 limit.</li>
+        </ul></dd>
         <dt>Version 1.8</dt>
         <dd><ul>
           <li>Reminder under “Vacation days left” when the contract ends in 2027: add the 22 days that vest on 1 January 2027.</li>
@@ -381,6 +385,8 @@ try {
         <dd>Severance is tax-free up to your average monthly regular pay (base salary × 14 ÷ 12) × years of service. Only the part above that limit is taxed. You can also take the additional severance out of IRS and Social Security with the checkbox.</dd>
         <dt>IRS on everything else</dt>
         <dd>Estimated with the 2026 Portuguese withholding table. The holiday and Christmas bonuses are taxed on their own. Vacation, training, the annual bonus and any taxed severance are added on top of the month’s salary, so they are taxed at a higher rate. Dependents and the disability factor lower the result. It is an advance, and the final tax is settled in the annual return.</dd>
+        <dt>IRS Jovem</dt>
+        <dd>If ticked, the IRS on the pay items (vacation, training, holiday and Christmas bonus, annual bonus) is reduced by the exempt share for the year of income: 100%, 75%, 50% or 25%. Social Security does not change, the taxed part of the severance is left out, and the yearly limit of €29,542.15 is assumed not to be used up already.</dd>
         <dt>Lawyer’s fee</dt>
         <dd>A fixed 2.5% of the total before deductions.</dd>
         <dt>After deductions</dt>
@@ -439,7 +445,7 @@ try {
             <input type="number" id="train" min="0" step="0.5" value="0" inputmode="decimal">
           </div>
         </div>
-        <div class="note-box" id="vacNote" hidden><strong>Contract ending in 2027?</strong> Remember to add the 22 vacation days that vest on 1 January 2027 to “Vacation days left”, together with any unused days from 2026.</div>
+        <div class="note-box" id="vacNote" hidden><strong>Contract ending in 2027?</strong> Remember to add the 22 vacation days that vest on 1 January 2027 to “Vacation days left”, together with any unused days from this year.</div>
         <span class="hint" style="display:block;margin:0 0 14px;">One vacation day is monthly pay × 12 ÷ 260. Training hours are paid at monthly pay × 12 ÷ (52 × weekly hours).</span>
       </fieldset>
 
@@ -512,6 +518,20 @@ try {
           <input type="checkbox" id="nov">
           <span>Paid in November 2026 (IRS withholding is halved this month)</span>
         </label>
+        <label class="check" for="jovem">
+          <input type="checkbox" id="jovem">
+          <span><strong>IRS Jovem</strong>: the employee is 35 or under and asked the employer to apply it</span>
+        </label>
+        <div class="field">
+          <label for="jovemYear">IRS Jovem year of income</label>
+          <select id="jovemYear" disabled>
+            <option value="1">1st year (100% exempt)</option>
+            <option value="0.75" selected>2nd to 4th year (75% exempt)</option>
+            <option value="0.5">5th to 7th year (50% exempt)</option>
+            <option value="0.25">8th to 10th year (25% exempt)</option>
+          </select>
+          <span class="hint">Applied to the pay items only, not to the taxed part of the severance. It assumes this year’s limit of €29,542.15 of exempt income has not been used up already.</span>
+        </div>
       </fieldset>
     </div>
 
@@ -537,6 +557,7 @@ try {
           <div><dt>Average monthly regular pay</dt><dd id="f-avg"></dd></div>
           <div><dt>IRS-exempt severance limit</dt><dd id="f-limit"></dd></div>
           <div><dt>Severance above the limit, taxed</dt><dd id="f-taxable"></dd></div>
+          <div id="f-jovem-row" hidden><dt>IRS Jovem exempt income</dt><dd id="f-jovem"></dd></div>
         </dl>
         <ul class="items" id="items"></ul>
 
@@ -571,7 +592,7 @@ try {
           <p>The severance is exempt from IRS up to average monthly regular pay × years of service. The exemption is lost, for example, if the person works for the same employer again within 24 months.</p>
           <p>The lawyer’s fee is a fixed 2.5% of the total of the whole package and does not change the Social Security or IRS estimate.</p>
           <p>For each dependent with a disability of 60% or more, €84.82 a month (€42.41 if married with two incomes) is added to the amount deducted from the withholding. Your employer can multiply it by up to 3, or up to 6 if married with two incomes, and the calculator uses the factor you enter.</p>
-          <p>Not covered: the Azores and Madeira tables, the tables for taxpayers who have a disability themselves, IRS Jovem, and the separate exemption for voluntary performance bonuses. Withholding is an advance, and the final tax is settled in the annual return.</p>
+          <p>Not covered: the Azores and Madeira tables, the tables for taxpayers who have a disability themselves, and the separate exemption for voluntary performance bonuses. Withholding is an advance, and the final tax is settled in the annual return.</p>
         </details>
         <p class="fine">Estimates only, not legal or tax advice. The three-month minimum and the statutory caps in article 366 of the Labour Code are not applied. The days per year are applied to the whole length of service, without the transitional split for service before 1 May 2023.</p>
       </div>
@@ -588,6 +609,7 @@ try {
   var r2 = function (x) { return Math.round((x + Number.EPSILON) * 100) / 100; };
   var MINUS = "\u2212";
   var SS_RATE = 0.11;
+  var JOVEM_LIMIT = 29542.15; // 55 x IAS (537.13) in 2026
   var lastText = "";
 
   var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -745,6 +767,9 @@ try {
     var disFactor = Math.min(twoIncomes ? 6 : 3, Math.floor(val("disFactor")));
     var addon = sit.useDeps ? depsDis * (twoIncomes ? 42.41 : 84.82) * disFactor : 0;
     var halved = $("nov").checked;
+    var jovem = $("jovem").checked;
+    $("jovemYear").disabled = !jovem;
+    var jovemPct = jovem ? parseFloat($("jovemYear").value) || 0 : 0;
 
     // Length of service
     var totalDays = span(start, end);
@@ -827,6 +852,14 @@ try {
       } else {
         it.irsAmt = stackSum > 0 ? r2(inc * it.tax / stackSum) : 0;
       }
+    });
+
+    // IRS Jovem: part of the pay items is exempt. The two severance lines are left out.
+    var jovemIncome = items.slice(2).reduce(function (s, it) { return s + it.gross; }, 0);
+    var jovemExempt = Math.min(jovemPct * jovemIncome, JOVEM_LIMIT);
+    var jovemShare = jovemIncome > 0 ? jovemExempt / jovemIncome : 0;
+    items.forEach(function (it, idx) {
+      if (idx > 1 && jovemShare > 0) it.irsAmt = r2(it.irsAmt * (1 - jovemShare));
       it.net = r2(it.gross - it.ssAmt - it.irsAmt);
     });
 
@@ -844,6 +877,8 @@ try {
     $("f-avg").textContent = cur.format(avgMonthly);
     $("f-limit").textContent = cur.format(limit);
     $("f-taxable").textContent = cur.format(r2(mainTax + addTax));
+    $("f-jovem-row").hidden = !(jovemExempt > 0);
+    $("f-jovem").textContent = cur.format(r2(jovemExempt));
 
     var list = $("items");
     list.innerHTML = "";
@@ -941,7 +976,7 @@ try {
   }
 
   var ids = ["start", "end", "annualPay", "payments", "diu", "weekly", "vac", "train", "holPaid", "xmasPaid",
-             "annualBonus", "days", "daysExtra", "extra", "extraFree", "situation", "deps", "depsDis", "disFactor", "nov"];
+             "annualBonus", "days", "daysExtra", "extra", "extraFree", "situation", "deps", "depsDis", "disFactor", "nov", "jovem", "jovemYear"];
   ids.forEach(function (id) {
     $(id).addEventListener("input", render);
     $(id).addEventListener("change", render);
