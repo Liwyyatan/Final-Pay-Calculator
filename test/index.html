@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>TEST CALCULATOR</title>
+<title>TEST</title>
 <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT37UNnLcfkL0RqYe7Xs6xELwag1CJB08AsHuZycqyYzhx5R-8rcfegZvY">
 <link rel="apple-touch-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT37UNnLcfkL0RqYe7Xs6xELwag1CJB08AsHuZycqyYzhx5R-8rcfegZvY">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -277,15 +277,19 @@ try {
 </div>
 <div class="wrap">
   <div class="top">
-    <h1>TEST CALCULATOR</h1>
+    <h1>TEST</h1>
     <button type="button" class="theme-toggle" id="theme"></button>
   </div>
   <p class="lede">A clear view of your end-of-contract package under Portuguese labour rules, with an estimate of Social Security and IRS for each parcel. It updates as you type.</p>
 
   <details class="explain updates">
-    <summary><span>Updates by version</span><span class="ver">Current version 1.8</span></summary>
+    <summary><span>Updates by version</span><span class="ver">Current version 1.9</span></summary>
     <div class="body">
       <dl>
+        <dt>Version 1.9</dt>
+        <dd><ul>
+          <li>Annual pay is always split into 14 payments, so the option to choose 12 was removed.</li>
+        </ul></dd>
         <dt>Version 1.8</dt>
         <dd><ul>
           <li>Reminder under “Vacation days left” when the contract ends in 2027: add the 22 days that vest on 1 January 2027.</li>
@@ -355,7 +359,7 @@ try {
       <h3>The amounts</h3>
       <dl>
         <dt>Monthly base salary</dt>
-        <dd>Annual pay ÷ 14. If your annual pay covers only 12 payments, without the holiday and Christmas bonuses, it is ÷ 12 instead. If you tick the shift allowance box, 15% is added, and every amount below uses that higher monthly pay.</dd>
+        <dd>Annual pay ÷ 14 (12 monthly payments plus the holiday and Christmas bonuses). If you tick the shift allowance box, 15% is added, and every amount below uses that higher monthly pay.</dd>
         <dt>Severance for years of service</dt>
         <dd>Monthly base salary ÷ 30 gives one day of pay. Multiply it by the severance days per year (14 + 16 by default) and by the years of service. Part-years count proportionally.</dd>
         <dt>Additional severance</dt>
@@ -413,14 +417,7 @@ try {
             <input type="number" id="weekly" min="1" max="60" step="0.5" value="40" inputmode="decimal">
           </div>
         </div>
-        <div class="field">
-          <label for="payments">Annual pay covers</label>
-          <select id="payments">
-            <option value="14" selected>14 monthly payments, including the holiday and Christmas bonuses</option>
-            <option value="12">12 monthly payments, without the bonuses</option>
-          </select>
-          <span class="hint" id="monthlyHint"></span>
-        </div>
+        <span class="hint" id="monthlyHint" style="display:block;margin:-4px 0 14px;"></span>
         <label class="check" for="diu">
           <input type="checkbox" id="diu">
           <span>Add 15% to the base salary as <strong>Shift Allowance</strong></span>
@@ -439,7 +436,7 @@ try {
             <input type="number" id="train" min="0" step="0.5" value="0" inputmode="decimal">
           </div>
         </div>
-        <div class="note-box" id="vacNote" hidden><strong>Contract ending in 2027?</strong> Remember to add the 22 vacation days that vest on 1 January 2027 to “Vacation days left”, together with any unused days from 2026.</div>
+        <div class="note-box" id="vacNote" hidden><strong>Contract ending in 2027?</strong> Remember to add the 22 vacation days that vest on 1 January 2027 to “Vacation days left”, together with any unused days from this year.</div>
         <span class="hint" style="display:block;margin:0 0 14px;">One vacation day is monthly pay × 12 ÷ 260. Training hours are paid at monthly pay × 12 ÷ (52 × weekly hours).</span>
       </fieldset>
 
@@ -711,7 +708,7 @@ try {
     var end = parseDate($("end").value);
     $("vacNote").hidden = !(end && end.y === 2027);
     var annualPay = val("annualPay");
-    var payments = parseInt($("payments").value, 10) || 14;
+    var payments = 14;
     var baseMonthly = annualPay / payments;
     var diu = $("diu").checked ? baseMonthly * 0.15 : 0;
     var salary = baseMonthly + diu;
@@ -940,7 +937,7 @@ try {
     show("result");
   }
 
-  var ids = ["start", "end", "annualPay", "payments", "diu", "weekly", "vac", "train", "holPaid", "xmasPaid",
+  var ids = ["start", "end", "annualPay", "diu", "weekly", "vac", "train", "holPaid", "xmasPaid",
              "annualBonus", "days", "daysExtra", "extra", "extraFree", "situation", "deps", "depsDis", "disFactor", "nov"];
   ids.forEach(function (id) {
     $(id).addEventListener("input", render);
