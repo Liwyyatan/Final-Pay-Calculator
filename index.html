@@ -8,7 +8,7 @@
 <link rel="apple-touch-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT37UNnLcfkL0RqYe7Xs6xELwag1CJB08AsHuZycqyYzhx5R-8rcfegZvY">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
 try {
   var savedTheme = localStorage.getItem("final-pay-theme");
@@ -17,13 +17,13 @@ try {
 </script>
 <style>
   :root {
-    --bg: #F3F5F8;
+    --bg: #E8F2F7;
     --paper: #FFFFFF;
-    --ink: #14213D;
-    --muted: #586379;
-    --accent: #23468F;
-    --line: #D5DBE6;
-    --soft: #E9EEF6;
+    --ink: #12304A;
+    --muted: #4C667C;
+    --accent: #1C64A8;
+    --line: #C9DDE8;
+    --soft: #DCEAF2;
     --danger: #B3261E;
     color-scheme: light;
     box-sizing: border-box;
@@ -66,19 +66,19 @@ try {
   }
   .wrap { max-width: 1060px; margin: 0 auto; padding: 32px 20px 56px; }
   h1 {
-    font-family: "Newsreader", Georgia, "Times New Roman", serif;
-    font-weight: 500;
-    font-size: 34px;
+    font-family: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-weight: 600;
+    font-size: 32px;
     line-height: 1.15;
-    margin: 0 0 6px;
-    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+    letter-spacing: -0.005em;
   }
   .lede { margin: 0 0 32px; color: var(--muted); max-width: 60ch; }
   .notice { background: #5865F2; color: #FFFFFF; font-size: 16px; font-weight: 500; line-height: 1.4; padding: 14px 20px; }
   .notice .inner { max-width: 1060px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 14px; }
   .notice svg { flex: none; width: 30px; height: 30px; fill: #FFFFFF; }
   .notice strong { font-weight: 700; }
-  .explain { margin: 0 0 30px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); }
+  .explain { margin: 0 0 30px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); }
   .explain summary { cursor: pointer; padding: 14px 18px; font-weight: 600; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .explain summary::-webkit-details-marker { display: none; }
   .explain summary::after { content: ""; flex: none; width: 8px; height: 8px; margin-right: 4px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform 0.15s; }
@@ -88,6 +88,12 @@ try {
   .explain dl { margin: 10px 0 0; display: grid; grid-template-columns: minmax(150px, 220px) minmax(0, 1fr); gap: 0; font-size: 14.5px; border-top: 1px solid var(--line); }
   .explain dt { font-weight: 500; padding: 11px 20px 11px 0; border-bottom: 1px solid var(--line); }
   .explain dd { margin: 0; padding: 11px 0; color: var(--muted); border-bottom: 1px solid var(--line); }
+  .updates { margin-bottom: 14px; }
+  .updates dl { margin-top: 4px; border-top: 0; }
+  .explain .ver { margin-left: auto; margin-right: 10px; font-size: 13px; font-weight: 500; color: var(--muted); }
+  .explain dd ul { margin: 0; padding-left: 18px; }
+  .explain dd li { margin: 0 0 5px; }
+  .explain dd li:last-child { margin-bottom: 0; }
   @media (max-width: 640px) {
     .explain dl { grid-template-columns: minmax(0, 1fr); }
     .explain dt { padding: 11px 0 0; border-bottom: 0; }
@@ -135,7 +141,8 @@ try {
     color: var(--ink);
     background: var(--paper);
     border: 1px solid var(--line);
-    border-radius: 5px;
+    border-radius: 10px;
+    transition: border-color 0.15s, box-shadow 0.15s;
   }
   select { padding-right: 8px; }
   input:focus-visible, select:focus-visible, button:focus-visible, summary:focus-visible {
@@ -152,11 +159,12 @@ try {
   .statement {
     background: var(--paper);
     border: 1px solid var(--line);
-    border-radius: 6px;
-    padding: 26px 26px 22px;
+    border-radius: 18px;
+    box-shadow: 0 1px 2px rgba(18, 48, 74, 0.06), 0 10px 28px rgba(18, 48, 74, 0.07);
+    padding: 28px 28px 24px;
   }
   .statement h2 {
-    font-family: "Newsreader", Georgia, "Times New Roman", serif;
+    font-family: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
     font-weight: 500;
     font-size: 24px;
     margin: 0 0 14px;
@@ -192,10 +200,10 @@ try {
   .sums .lead { font-weight: 600; }
   .sums .minus { color: var(--muted); }
   .pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px 16px; margin: 0 0 14px; }
-  .pair .cap { display: block; font-size: 13px; color: var(--muted); }
-  .pair .big { display: block; font-family: "Newsreader", Georgia, "Times New Roman", serif; font-size: 26px; line-height: 1.2; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .pair .cap { display: block; margin-bottom: 2px; font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .pair .big { display: block; font-family: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 26px; line-height: 1.2; font-weight: 500; font-variant-numeric: tabular-nums; }
   .pair .post .big { color: var(--accent); }
-  .bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--soft); margin: 0 0 8px; }
+  .bar { display: flex; height: 12px; border-radius: 999px; overflow: hidden; background: var(--soft); margin: 0 0 8px; }
   .bar i { display: block; height: 100%; }
   .legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 18px; font-size: 12.5px; color: var(--muted); }
   .legend span { display: inline-flex; align-items: center; gap: 6px; }
@@ -204,6 +212,15 @@ try {
   .seg-ss { background: var(--muted); }
   .seg-irs { background: var(--ink); opacity: 0.55; }
   .seg-oth { background: var(--ink); opacity: 0.25; }
+  .months { margin: 0 0 18px; font-size: 14.5px; line-height: 1.5; }
+  .months strong { font-weight: 600; color: var(--accent); }
+  .note-box { margin: 0 0 14px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--soft); font-size: 14px; line-height: 1.45; }
+  .note-box strong { color: var(--accent); }
+  .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+  input:focus, select:focus { border-color: var(--accent); }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
   .rates-title { font-size: 15px; font-weight: 600; margin: 22px 0 2px; }
   .rates-note { margin: 0 0 8px; font-size: 13px; color: var(--muted); line-height: 1.4; }
   .rates-wrap { overflow-x: auto; }
@@ -218,7 +235,7 @@ try {
   .total { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-top: 14px; padding-top: 16px; border-top: 2px solid var(--ink); }
   .total .name { font-weight: 600; }
   .total .amt {
-    font-family: "Newsreader", Georgia, "Times New Roman", serif;
+    font-family: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
     font-size: 42px;
     line-height: 1;
     font-weight: 500;
@@ -232,11 +249,11 @@ try {
     font-weight: 500;
     font-size: 14px;
     height: 38px;
-    padding: 0 16px;
+    padding: 0 18px;
     color: var(--accent);
     background: transparent;
     border: 1px solid var(--accent);
-    border-radius: 5px;
+    border-radius: 999px;
     cursor: pointer;
   }
   button:hover { background: var(--soft); }
@@ -263,7 +280,74 @@ try {
     <h1>Final pay calculator</h1>
     <button type="button" class="theme-toggle" id="theme"></button>
   </div>
-  <p class="lede">Severance and end-of-contract amounts under Portuguese labour rules, with an estimate of Social Security and IRS for each parcel. The breakdown updates as you type.</p>
+  <p class="lede">A clear view of your end-of-contract package under Portuguese labour rules, with an estimate of Social Security and IRS for each parcel. It updates as you type.</p>
+
+  <details class="explain updates">
+    <summary><span>Updates by version</span><span class="ver">Current version 1.8</span></summary>
+    <div class="body">
+      <dl>
+        <dt>Version 1.8</dt>
+        <dd><ul>
+          <li>Reminder under “Vacation days left” when the contract ends in 2027: add the 22 days that vest on 1 January 2027.</li>
+        </ul></dd>
+        <dt>Version 1.7</dt>
+        <dd><ul>
+          <li>Lumon-style look: pale blue theme, rounder shapes and one clean font.</li>
+          <li>The totals count up when they change.</li>
+          <li>A sentence under the bar shows the package in months of pay.</li>
+          <li>This list of updates.</li>
+        </ul></dd>
+        <dt>Version 1.6</dt>
+        <dd><ul>
+          <li>New “Shift Allowance” checkbox that adds 15% to the base salary. Every amount uses the higher monthly pay.</li>
+          <li>One vacation day is now monthly pay × 12 ÷ 260, and the ÷ 30 or ÷ 22 choice is gone. Unused vacation is recalculated.</li>
+        </ul></dd>
+        <dt>Version 1.5</dt>
+        <dd><ul>
+          <li>Banner with the Discord contact for errors and suggestions.</li>
+          <li>“How every amount is calculated” menu, with lines between the items.</li>
+          <li>“Lawyer’s fee”: a fixed 2.5% of the total package that can no longer be edited.</li>
+          <li>Removed the average monthly regular pay field. The IRS-exempt limit always uses base salary × 14 ÷ 12.</li>
+          <li>Additional severance set to €6,648.</li>
+          <li>Custom page icon in the downloadable file.</li>
+        </ul></dd>
+        <dt>Version 1.4</dt>
+        <dd><ul>
+          <li>“Before deductions” and “After deductions” totals, with a bar showing where the money goes.</li>
+          <li>Training hours are no longer reduced for Social Security.</li>
+          <li>Option to take the additional severance out of IRS and Social Security.</li>
+          <li>The final account shows the average monthly regular pay, the IRS-exempt severance limit and the severance above it.</li>
+          <li>“Deduction rates” table with the Social Security and IRS percentage for each parcel.</li>
+          <li>Dependents, dependents with a disability and the disability factor start at 0.</li>
+        </ul></dd>
+        <dt>Version 1.3</dt>
+        <dd><ul>
+          <li>Dependents and the disability factor (60% or more) in the IRS withholding estimate.</li>
+          <li>Light and dark page toggle in the top right corner, with a gray dark theme.</li>
+          <li>The annual bonus is always paid in full.</li>
+        </ul></dd>
+        <dt>Version 1.2</dt>
+        <dd><ul>
+          <li>Annual pay replaces the monthly base salary, split into 14 or 12 payments.</li>
+          <li>Every case is a collective dismissal, so severance carries no Social Security.</li>
+          <li>2.5% additional deduction on the total package (renamed “Lawyer’s fee” in version 1.5).</li>
+        </ul></dd>
+        <dt>Version 1.1</dt>
+        <dd><ul>
+          <li>Severance of 14 + 16 days of pay per year of service, in two fields.</li>
+          <li>Annual bonus field.</li>
+          <li>Estimated Social Security (11%) and IRS (2026 withholding tables) for each parcel, with a net total.</li>
+          <li>IRS exemption on the severance, up to average monthly pay × years of service.</li>
+          <li>Option for payments made in November 2026, when IRS withholding is halved.</li>
+        </ul></dd>
+        <dt>Version 1.0</dt>
+        <dd><ul>
+          <li>First version: contract dates, base salary, vacation days left, training hours, holiday and Christmas bonus, and the additional severance.</li>
+          <li>Severance by years of service under Portuguese rules.</li>
+        </ul></dd>
+      </dl>
+    </div>
+  </details>
 
   <details class="explain">
     <summary>How every amount is calculated</summary>
@@ -355,6 +439,7 @@ try {
             <input type="number" id="train" min="0" step="0.5" value="0" inputmode="decimal">
           </div>
         </div>
+        <div class="note-box" id="vacNote" hidden><strong>Contract ending in 2027?</strong> Remember to add the 22 vacation days that vest on 1 January 2027 to “Vacation days left”, together with any unused days from 2026.</div>
         <span class="hint" style="display:block;margin:0 0 14px;">One vacation day is monthly pay × 12 ÷ 260. Training hours are paid at monthly pay × 12 ÷ (52 × weekly hours).</span>
       </fieldset>
 
@@ -433,18 +518,19 @@ try {
     <section class="statement" aria-live="polite" aria-labelledby="stmt-title">
       <h2 id="stmt-title">Final account</h2>
       <div id="empty-state">
-        <p class="empty">Enter the contract dates and annual pay to see the breakdown.</p>
+        <p class="empty">Add the contract dates and annual pay, and your breakdown will appear here.</p>
       </div>
       <div id="error-state" hidden>
         <p class="error" role="alert">The contract end date is before the start date.</p>
       </div>
       <div id="result" hidden>
         <div class="pair">
-          <div class="pre"><span class="cap">Before deductions</span><span class="big" id="p-pre"></span></div>
-          <div class="post"><span class="cap">After deductions</span><span class="big" id="p-post"></span></div>
+          <div class="pre"><span class="cap">Before deductions</span><span class="big" id="p-pre" aria-hidden="true"></span><span class="sr-only" id="p-pre-sr"></span></div>
+          <div class="post"><span class="cap">After deductions</span><span class="big" id="p-post" aria-hidden="true"></span><span class="sr-only" id="p-post-sr"></span></div>
         </div>
         <div class="bar" id="bar" aria-hidden="true"></div>
         <div class="legend" id="legend"></div>
+        <p class="months" id="months-line"></p>
         <dl class="facts">
           <div><dt>Length of service</dt><dd id="f-service"></dd></div>
           <div><dt id="f-months-label">Months worked this year</dt><dd id="f-months"></dd></div>
@@ -462,7 +548,7 @@ try {
         </div>
         <div class="total">
           <span class="name">Estimated net</span>
-          <span class="amt" id="total"></span>
+          <span class="amt" id="total" aria-hidden="true"></span><span class="sr-only" id="total-sr"></span>
         </div>
 
         <h3 class="rates-title">Deduction rates</h3>
@@ -503,6 +589,35 @@ try {
   var MINUS = "\u2212";
   var SS_RATE = 0.11;
   var lastText = "";
+
+  var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  var counters = {};
+  function countTo(id, target) {
+    var el = $(id);
+    var prev = counters[id];
+    var from = prev ? prev.value : 0;
+    if (prev && prev.raf && typeof cancelAnimationFrame === "function") cancelAnimationFrame(prev.raf);
+    var state = counters[id] = { value: from, raf: 0 };
+    if (reduceMotion || from === target || typeof requestAnimationFrame !== "function") {
+      state.value = target;
+      el.textContent = cur.format(target);
+      return;
+    }
+    var t0 = null;
+    var step = function (ts) {
+      if (t0 === null) t0 = ts;
+      var p = Math.min(1, (ts - t0) / 500);
+      var eased = 1 - Math.pow(1 - p, 3);
+      state.value = from + (target - from) * eased;
+      el.textContent = cur.format(p < 1 ? state.value : target);
+      if (p < 1) { state.raf = requestAnimationFrame(step); } else { state.value = target; }
+    };
+    state.raf = requestAnimationFrame(step);
+  }
+  function monthsText(x) {
+    var r = Math.round(x * 10) / 10;
+    return pct.format(x) + (r === 1 ? " month" : " months");
+  }
 
   // 2026 mainland withholding tables (Despacho n.º 233-A/2026).
   // Each row: [upper limit of monthly pay, marginal rate, amount to deduct].
@@ -594,6 +709,7 @@ try {
   function render() {
     var start = parseDate($("start").value);
     var end = parseDate($("end").value);
+    $("vacNote").hidden = !(end && end.y === 2027);
     var annualPay = val("annualPay");
     var payments = parseInt($("payments").value, 10) || 14;
     var baseMonthly = annualPay / payments;
@@ -759,10 +875,15 @@ try {
     $("row-other").hidden = !(tOther > 0);
     $("t-other-label").textContent = otherLabel;
     $("t-other").textContent = neg(tOther);
-    $("total").textContent = cur.format(tFinal);
+    countTo("total", tFinal);
+    $("total-sr").textContent = cur.format(tFinal);
 
-    $("p-pre").textContent = cur.format(tGross);
-    $("p-post").textContent = cur.format(tFinal);
+    countTo("p-pre", tGross);
+    countTo("p-post", tFinal);
+    $("p-pre-sr").textContent = cur.format(tGross);
+    $("p-post-sr").textContent = cur.format(tFinal);
+    $("months-line").innerHTML = "In other words, about <strong>" + monthsText(tGross / salary) +
+      "</strong> of your monthly pay before deductions, or <strong>" + monthsText(tFinal / salary) + "</strong> after them.";
 
     var rb = $("rates-body");
     rb.innerHTML = "";
