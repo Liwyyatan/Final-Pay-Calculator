@@ -9,7 +9,7 @@
     gtag('js', new Date());
   </script>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">  
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Final pay calculator</title>
 <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT37UNnLcfkL0RqYe7Xs6xELwag1CJB08AsHuZycqyYzhx5R-8rcfegZvY">
 <link rel="apple-touch-icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT37UNnLcfkL0RqYe7Xs6xELwag1CJB08AsHuZycqyYzhx5R-8rcfegZvY">
@@ -273,6 +273,54 @@ try {
   .empty { margin: 0; color: var(--muted); }
   .error { margin: 0; color: var(--danger); font-weight: 500; }
   [hidden] { display: none !important; }
+
+  .warn-box { margin: 0 0 16px; padding: 12px 14px; border: 1px solid var(--danger); border-radius: 12px; background: var(--soft); font-size: 14px; line-height: 1.45; }
+  .warn-box strong { color: var(--danger); }
+  .warn-box ul { margin: 6px 0 0; padding-left: 18px; }
+  .warn-box li { margin: 0 0 3px; }
+  .form-actions { display: flex; justify-content: flex-end; margin: -6px 0 10px; }
+  .btn-quiet { color: var(--muted); border-color: var(--line); }
+  .actions { flex-wrap: wrap; }
+  .print-only { display: none; }
+  .sticky-total {
+    display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 25;
+    height: auto; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 10px 20px calc(10px + env(safe-area-inset-bottom, 0px));
+    border: 0; border-top: 1px solid var(--line); border-radius: 0;
+    background: var(--paper); color: var(--ink); font-size: 14px; font-weight: 500;
+    box-shadow: 0 -6px 18px rgba(18, 48, 74, 0.10);
+  }
+  .sticky-total strong { font-size: 20px; font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+  @media (max-width: 860px) {
+    .wrap { padding-bottom: 96px; }
+    .sticky-total { display: flex; }
+  }
+  @media (min-width: 861px) {
+    .statement {
+      position: sticky;
+      top: calc(16px + env(safe-area-inset-top, 0px));
+      max-height: calc(100vh - 32px);
+      max-height: calc(100dvh - 32px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+  }
+  @media print {
+    :root:root:root { --bg: #FFFFFF; --paper: #FFFFFF; --ink: #111111; --muted: #444444; --accent: #1C64A8; --line: #BBBBBB; --soft: #EEEEEE; --danger: #B3261E; color-scheme: light; }
+    body { background: #FFFFFF; font-size: 12pt; }
+    .notice, .theme-toggle, details.explain, .inputs, .actions, details.how, .lede, .sticky-total, .form-actions { display: none !important; }
+    .wrap { max-width: none; padding: 0; }
+    .layout { display: block; }
+    .statement { position: static; max-height: none; overflow: visible; border: 0; box-shadow: none; padding: 0; }
+    .print-only { display: block; margin: 0 0 14px; }
+    .print-only h3 { margin: 0 0 6px; font-size: 14px; }
+    .print-only dl { margin: 0; display: grid; grid-template-columns: 220px 1fr; gap: 3px 16px; font-size: 12px; }
+    .print-only dt { color: var(--muted); }
+    .print-only dd { margin: 0; }
+    .print-date { margin: 8px 0 0; font-size: 11px; color: var(--muted); }
+    .item, .rates tr { break-inside: avoid; }
+    .bar, .legend i { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
 </style>
 </head>
 <body>
@@ -290,9 +338,21 @@ try {
   <p class="lede">A clear view of your end-of-contract package under Portuguese labour rules, with an estimate of Social Security and IRS for each parcel. It updates as you type.</p>
 
   <details class="explain updates">
-    <summary><span>Updates by version</span><span class="ver">Current version 1.9</span></summary>
+    <summary><span>Updates by version</span><span class="ver">Current version 2.1</span></summary>
     <div class="body">
       <dl>
+        <dt>Version 2.1</dt>
+        <dd><ul>
+          <li>On larger screens the final account stays in view on the right while you scroll through the fields. If it is taller than the screen, it scrolls inside its own box.</li>
+        </ul></dd>
+        <dt>Version 2.0</dt>
+        <dd><ul>
+          <li>Yearly values (tax tables, limits, minimum wage) are grouped in one block at the top of the code, with a warning when the end date is not in 2026. The November option hides itself after 30 November.</li>
+          <li>“Please double-check” warnings for unusual inputs, such as very high vacation days or a bonus larger than annual pay.</li>
+          <li>“Print / Save as PDF” with a clean print layout and an inputs summary.</li>
+          <li>“Clear all” button, with a few seconds to undo it.</li>
+          <li>A sticky “After deductions” bar on phones.</li>
+        </ul></dd>
         <dt>Version 1.9</dt>
         <dd><ul>
           <li>IRS Jovem option: tick it and choose the year of income, and the IRS estimate on the pay items is reduced by the exempt share (100%, 75%, 50% or 25%), up to the 2026 limit.</li>
@@ -404,6 +464,7 @@ try {
 
   <div class="layout">
     <div class="inputs">
+      <div class="form-actions"><button type="button" class="btn-quiet" id="clearAll">Clear all</button></div>
       <fieldset>
         <legend>Contract</legend>
         <div class="row">
@@ -521,7 +582,7 @@ try {
           </div>
         </div>
         <span class="hint" style="display:block;margin:-4px 0 16px;">Each of them adds €84.82 a month to the amount deducted from the withholding (€42.41 if married with two incomes). Your employer can multiply it by up to 3, or up to 6 if married with two incomes. Use a factor of at least 1 for the reduction to apply.</span>
-        <label class="check" for="nov">
+        <label class="check" for="nov" id="novRow">
           <input type="checkbox" id="nov">
           <span>Paid in November 2026 (IRS withholding is halved this month)</span>
         </label>
@@ -544,6 +605,10 @@ try {
 
     <section class="statement" aria-live="polite" aria-labelledby="stmt-title">
       <h2 id="stmt-title">Final account</h2>
+      <div class="warn-box" id="warnings" hidden>
+        <strong>Please double-check</strong>
+        <ul id="warnings-list"></ul>
+      </div>
       <div id="empty-state">
         <p class="empty">Add the contract dates and annual pay, and your breakdown will appear here.</p>
       </div>
@@ -551,6 +616,7 @@ try {
         <p class="error" role="alert">The contract end date is before the start date.</p>
       </div>
       <div id="result" hidden>
+        <div class="print-only" id="print-inputs"></div>
         <div class="pair">
           <div class="pre"><span class="cap">Before deductions</span><span class="big" id="p-pre" aria-hidden="true"></span><span class="sr-only" id="p-pre-sr"></span></div>
           <div class="post"><span class="cap">After deductions</span><span class="big" id="p-post" aria-hidden="true"></span><span class="sr-only" id="p-post-sr"></span></div>
@@ -590,6 +656,8 @@ try {
 
         <div class="actions">
           <button type="button" id="copy">Copy breakdown</button>
+          <button type="button" id="printBtn">Print / Save as PDF</button>
+          <span class="hint" id="printMsg">If the print window doesn’t open, press Ctrl+P (Cmd+P on a Mac).</span>
         </div>
 
         <details class="how">
@@ -607,6 +675,11 @@ try {
   </div>
 </div>
 
+<button type="button" class="sticky-total" id="stickyTotal" hidden>
+  <span>After deductions</span>
+  <strong id="sticky-amt" aria-hidden="true"></strong>
+</button>
+
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
@@ -615,38 +688,13 @@ try {
   var pct = new Intl.NumberFormat(undefined, { maximumFractionDigits: 1 });
   var r2 = function (x) { return Math.round((x + Number.EPSILON) * 100) / 100; };
   var MINUS = "\u2212";
-  var SS_RATE = 0.11;
-  var JOVEM_LIMIT = 29542.15; // 55 x IAS (537.13) in 2026
-  var lastText = "";
-
-  var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-  var counters = {};
-  function countTo(id, target) {
-    var el = $(id);
-    var prev = counters[id];
-    var from = prev ? prev.value : 0;
-    if (prev && prev.raf && typeof cancelAnimationFrame === "function") cancelAnimationFrame(prev.raf);
-    var state = counters[id] = { value: from, raf: 0 };
-    if (reduceMotion || from === target || typeof requestAnimationFrame !== "function") {
-      state.value = target;
-      el.textContent = cur.format(target);
-      return;
-    }
-    var t0 = null;
-    var step = function (ts) {
-      if (t0 === null) t0 = ts;
-      var p = Math.min(1, (ts - t0) / 500);
-      var eased = 1 - Math.pow(1 - p, 3);
-      state.value = from + (target - from) * eased;
-      el.textContent = cur.format(p < 1 ? state.value : target);
-      if (p < 1) { state.raf = requestAnimationFrame(step); } else { state.value = target; }
-    };
-    state.raf = requestAnimationFrame(step);
-  }
-  function monthsText(x) {
-    var r = Math.round(x * 10) / 10;
-    return pct.format(x) + (r === 1 ? " month" : " months");
-  }
+  // ===== Values that change every year (update these each January) =====
+  var TAX_YEAR = 2026;                // the year the tables and limits below belong to
+  var SS_RATE = 0.11;                 // employee Social Security
+  var MIN_WAGE = 920;                 // monthly minimum wage, paid 14 times a year
+  var JOVEM_LIMIT = 29542.15;         // IRS Jovem: 55 x IAS (537.13)
+  var NOVEMBER_HALVING_YEAR = 2026;   // IRS withholding is halved on payments made in November of this year
+  var VACATION_REMINDER_YEAR = 2027;  // contracts ending this year need the 22 days vested on 1 January
 
   // 2026 mainland withholding tables (Despacho n.º 233-A/2026).
   // Each row: [upper limit of monthly pay, marginal rate, amount to deduct].
@@ -685,6 +733,40 @@ try {
     marriedTwo: { rows: ROWS_A, dep: 21.43, cap: 20221, useDeps: true },
     marriedOne: { rows: ROWS_C, dep: 42.86, cap: 20265, useDeps: true }
   };
+  // ===== End of yearly values =====
+
+  var lastText = "";
+  var statementInView = false;
+
+  var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  var counters = {};
+  function countTo(id, target) {
+    var el = $(id);
+    var prev = counters[id];
+    var from = prev ? prev.value : 0;
+    if (prev && prev.raf && typeof cancelAnimationFrame === "function") cancelAnimationFrame(prev.raf);
+    var state = counters[id] = { value: from, raf: 0 };
+    if (reduceMotion || from === target || typeof requestAnimationFrame !== "function") {
+      state.value = target;
+      el.textContent = cur.format(target);
+      return;
+    }
+    var t0 = null;
+    var step = function (ts) {
+      if (t0 === null) t0 = ts;
+      var p = Math.min(1, (ts - t0) / 500);
+      var eased = 1 - Math.pow(1 - p, 3);
+      state.value = from + (target - from) * eased;
+      el.textContent = cur.format(p < 1 ? state.value : target);
+      if (p < 1) { state.raf = requestAnimationFrame(step); } else { state.value = target; }
+    };
+    state.raf = requestAnimationFrame(step);
+  }
+  function monthsText(x) {
+    var r = Math.round(x * 10) / 10;
+    return pct.format(x) + (r === 1 ? " month" : " months");
+  }
+
 
   function withholding(R, sit, deps, halved, addon) {
     if (!(R > 0)) return 0;
@@ -733,12 +815,40 @@ try {
     $("empty-state").hidden = which !== "empty";
     $("error-state").hidden = which !== "error";
     $("result").hidden = which !== "result";
+    updateSticky();
+  }
+  function updateSticky() {
+    $("stickyTotal").hidden = !(!$("result").hidden && !statementInView);
+  }
+
+  function updateWarnings(start, end, annualPay) {
+    var w = [];
+    if (end && end.y !== TAX_YEAR) {
+      w.push("The end date is in " + end.y + ". The IRS withholding tables and the IRS Jovem limit used here are the " + TAX_YEAR +
+        (end.y > TAX_YEAR ? " values, so the IRS estimate may change once the " + end.y + " values are published."
+                          : " values, so they may not match the rules in force in " + end.y + "."));
+    }
+    if (start && end && !isBefore(end, start) && span(start, end) / 360 > 45) w.push("The length of service is more than 45 years. Please check the contract dates.");
+    if (annualPay > 0 && annualPay < MIN_WAGE * 14) w.push("Annual pay is below the " + TAX_YEAR + " minimum wage (" + cur.format(MIN_WAGE * 14) + " over 14 payments).");
+    if (annualPay > 250000) w.push("Annual pay looks very high. Please check the amount.");
+    if (annualPay > 0 && val("annualBonus") > annualPay) w.push("The annual bonus is larger than the annual pay.");
+    if (val("vac") > 44) w.push("Vacation days left is above 44 (two years of 22 days). Please check it.");
+    if (val("train") > 120) w.push("Training hours owed are above 120, the usual limit for 3 years of 40 hours.");
+    var wk = parseFloat($("weekly").value);
+    if (isFinite(wk) && (wk > 48 || wk < 10)) w.push("Weekly working hours look unusual (" + num.format(wk) + "). Please check them.");
+    var sevDays = val("days") + val("daysExtra");
+    if (sevDays > 45) w.push("Severance of " + num.format(sevDays) + " days per year is more than 45. Please check it.");
+    if (val("extra") > 100000) w.push("The additional severance is above " + cur.format(100000) + ". Please check it.");
+    var list = $("warnings-list");
+    list.innerHTML = "";
+    w.forEach(function (t) { var li = document.createElement("li"); li.textContent = t; list.appendChild(li); });
+    $("warnings").hidden = w.length === 0;
   }
 
   function render() {
     var start = parseDate($("start").value);
     var end = parseDate($("end").value);
-    $("vacNote").hidden = !(end && end.y === 2027);
+    $("vacNote").hidden = !(end && end.y === VACATION_REMINDER_YEAR);
     var annualPay = val("annualPay");
     var payments = parseInt($("payments").value, 10) || 14;
     var baseMonthly = annualPay / payments;
@@ -747,6 +857,8 @@ try {
     $("monthlyHint").textContent = annualPay > 0
       ? "Monthly base salary: " + cur.format(baseMonthly) + (diu > 0 ? ", plus " + cur.format(diu) + " shift allowance = " + cur.format(salary) : "")
       : "";
+
+    updateWarnings(start, end, annualPay);
 
     if (!start || !end || !(salary > 0)) { show("empty"); return; }
     if (isBefore(end, start)) { show("error"); return; }
@@ -919,6 +1031,8 @@ try {
     $("t-other").textContent = neg(tOther);
     countTo("total", tFinal);
     $("total-sr").textContent = cur.format(tFinal);
+    countTo("sticky-amt", tFinal);
+    $("stickyTotal").setAttribute("aria-label", "After deductions " + cur.format(tFinal) + ". Go to the final account.");
 
     countTo("p-pre", tGross);
     countTo("p-post", tFinal);
@@ -979,6 +1093,41 @@ try {
       (tOther > 0 ? "\n" + otherLabel + ": " + neg(tOther) : "") +
       "\nEstimated net: " + cur.format(tFinal);
 
+    // Inputs summary (shown only when printing)
+    var fmtDate = function (q) { return new Intl.DateTimeFormat(undefined, { day: "numeric", month: "long", year: "numeric" }).format(new Date(q.y, q.m - 1, q.d)); };
+    var yesNo = function (b) { return b ? "Yes" : "No"; };
+    var tableText = $("situation").querySelector('option[value="' + sitKey + '"]').text;
+    var inputRows = [
+      ["Contract", fmtDate(start) + " to " + fmtDate(end)],
+      ["Annual pay", cur.format(annualPay) + " (" + payments + " payments)"],
+      ["Shift allowance (+15%)", yesNo(diu > 0)],
+      ["Weekly working hours", num.format(weekly)],
+      ["Vacation days left", num.format(vacDays)],
+      ["Training hours owed", num.format(trainHours)],
+      ["Holiday bonus already paid", cur.format(holPaid)],
+      ["Christmas bonus already paid", cur.format(xmasPaid)],
+      ["Annual bonus", cur.format(annualBonus)],
+      ["Severance days per year", num.format(daysBase) + " + " + num.format(daysExtraPerYear)],
+      ["Additional severance", cur.format(extra) + (extraFree ? " (out of IRS and Social Security)" : "")],
+      ["IRS withholding table", tableText + ", " + plural(depsTotal, "dependent") + (depsDis > 0 ? ", " + depsDis + " with a disability (factor " + disFactor + ")" : "")],
+      ["IRS Jovem", jovem ? $("jovemYear").selectedOptions[0].text : "No"]
+    ];
+    if (!$("novRow").hidden) inputRows.splice(12, 0, ["Paid in November " + NOVEMBER_HALVING_YEAR, yesNo(halved)]);
+    var pi = $("print-inputs");
+    pi.innerHTML = "";
+    var ph = document.createElement("h3"); ph.textContent = "Inputs used"; pi.appendChild(ph);
+    var pdl = document.createElement("dl");
+    inputRows.forEach(function (r) {
+      var dt = document.createElement("dt"); dt.textContent = r[0];
+      var dd = document.createElement("dd"); dd.textContent = r[1];
+      pdl.appendChild(dt); pdl.appendChild(dd);
+    });
+    pi.appendChild(pdl);
+    var pd = document.createElement("p");
+    pd.className = "print-date";
+    pd.textContent = "Printed on " + new Intl.DateTimeFormat(undefined, { dateStyle: "long" }).format(new Date()) + ". These figures are estimates.";
+    pi.appendChild(pd);
+
     show("result");
   }
 
@@ -1028,6 +1177,53 @@ try {
   });
   if (systemDark && systemDark.addEventListener) systemDark.addEventListener("change", paintThemeButton);
   paintThemeButton();
+
+  // The November option disappears once November of that year is over.
+  var novemberOver = new Date() > new Date(NOVEMBER_HALVING_YEAR, 10, 30, 23, 59, 59);
+  if (novemberOver) { $("nov").checked = false; $("novRow").hidden = true; }
+
+  // Clear all, with a few seconds to undo it
+  var DEFAULTS = {};
+  function readState() {
+    var s = {};
+    ids.forEach(function (id) { var el = $(id); s[id] = el.type === "checkbox" ? el.checked : el.value; });
+    return s;
+  }
+  function writeState(s) {
+    ids.forEach(function (id) { var el = $(id); if (el.type === "checkbox") el.checked = !!s[id]; else el.value = s[id]; });
+    render();
+  }
+  DEFAULTS = readState();
+  var undoState = null, undoTimer = null, clearBtn = $("clearAll");
+  function resetClear() {
+    undoState = null;
+    clearTimeout(undoTimer);
+    clearBtn.textContent = "Clear all";
+  }
+  clearBtn.addEventListener("click", function () {
+    if (undoState) { writeState(undoState); resetClear(); return; }
+    undoState = readState();
+    writeState(DEFAULTS);
+    clearBtn.textContent = "Undo clear";
+    undoTimer = setTimeout(resetClear, 8000);
+  });
+  document.addEventListener("input", function () { if (undoState) resetClear(); });
+
+  // Print / Save as PDF
+  $("printBtn").addEventListener("click", function () {
+    try { window.print(); } catch (e) {}
+  });
+
+  // Sticky "After deductions" bar on small screens
+  $("stickyTotal").addEventListener("click", function () {
+    document.querySelector(".statement").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  });
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      statementInView = entries[0].isIntersecting;
+      updateSticky();
+    }, { threshold: 0.15 }).observe(document.querySelector(".statement"));
+  }
 
   render();
 })();
