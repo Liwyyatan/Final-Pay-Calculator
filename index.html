@@ -361,7 +361,7 @@ try {
 <div class="notice" role="note">
   <div class="inner">
     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
-    <span>These figures are estimates. If something looks wrong or you have a suggestion, please reach out on Discord.</span>
+    <span>These figures are estimates. If something looks wrong or you have a suggestion, please reach out to <strong>Sérgio R.</strong> on Discord.</span>
   </div>
 </div>
 <div class="wrap">
@@ -390,9 +390,13 @@ try {
   </header>
 
   <details class="explain updates">
-    <summary><span>Updates by version</span><span class="ver">Current version 2.3</span></summary>
+    <summary><span>Updates by version</span><span class="ver">Current version 2.4</span></summary>
     <div class="body">
       <dl>
+        <dt>Version 2.4</dt>
+        <dd><ul>
+          <li>The page starts blank on every refresh and when returning to it with the browser buttons. Browser autofill is turned off for all fields.</li>
+        </ul></dd>
         <dt>Version 2.3</dt>
         <dd><ul>
           <li>Restyled header banner: icon, soft gradient background with a ring pattern, and small tags for the case type and the tax year.</li>
@@ -547,23 +551,23 @@ try {
         <div class="row">
           <div class="field">
             <label for="annualPay">Annual pay (€)</label>
-            <input type="number" id="annualPay" min="0" step="0.01" inputmode="decimal">
+            <input autocomplete="off" type="number" id="annualPay" min="0" step="0.01" inputmode="decimal">
           </div>
           <div class="field">
             <label for="weekly">Weekly working hours</label>
-            <input type="number" id="weekly" min="1" max="60" step="0.5" value="40" inputmode="decimal">
+            <input autocomplete="off" type="number" id="weekly" min="1" max="60" step="0.5" value="40" inputmode="decimal">
           </div>
         </div>
         <div class="field">
           <label for="payments">Annual pay covers</label>
-          <select id="payments">
+          <select autocomplete="off" id="payments">
             <option value="14" selected>14 monthly payments, including the holiday and Christmas bonuses</option>
             <option value="12">12 monthly payments, without the bonuses</option>
           </select>
           <span class="hint" id="monthlyHint"></span>
         </div>
         <label class="check" for="diu">
-          <input type="checkbox" id="diu">
+          <input autocomplete="off" type="checkbox" id="diu">
           <span>Add 15% to the base salary as <strong>Shift Allowance</strong></span>
         </label>
       </fieldset>
@@ -573,11 +577,11 @@ try {
         <div class="row">
           <div class="field">
             <label for="vac">Vacation days left</label>
-            <input type="number" id="vac" min="0" step="0.5" value="0" inputmode="decimal">
+            <input autocomplete="off" type="number" id="vac" min="0" step="0.5" value="0" inputmode="decimal">
           </div>
           <div class="field">
             <label for="train">Training hours owed</label>
-            <input type="number" id="train" min="0" step="0.5" value="0" inputmode="decimal">
+            <input autocomplete="off" type="number" id="train" min="0" step="0.5" value="0" inputmode="decimal">
           </div>
         </div>
         <div class="note-box" id="vacNote" hidden><strong>Contract ending in 2027?</strong> Remember to add the 22 vacation days that vest on 1 January 2027 to “Vacation days left”, together with any unused days from this year.</div>
@@ -589,34 +593,34 @@ try {
         <div class="row">
           <div class="field">
             <label for="holPaid">Holiday bonus already paid this year (€)</label>
-            <input type="number" id="holPaid" min="0" step="0.01" value="0" inputmode="decimal">
+            <input autocomplete="off" type="number" id="holPaid" min="0" step="0.01" value="0" inputmode="decimal">
           </div>
           <div class="field">
             <label for="xmasPaid">Christmas bonus already paid this year (€)</label>
-            <input type="number" id="xmasPaid" min="0" step="0.01" value="0" inputmode="decimal">
+            <input autocomplete="off" type="number" id="xmasPaid" min="0" step="0.01" value="0" inputmode="decimal">
           </div>
         </div>
         <span class="hint" style="display:block;margin:-4px 0 16px;">Include instalments paid with the monthly salary. Both bonuses are calculated pro-rata for the months worked in the year the contract ends. The Christmas bonus is paid with the November salary, so for an end date in December only the December part is calculated.</span>
         <div class="field">
           <label for="annualBonus">Annual bonus (€)</label>
-          <input type="number" id="annualBonus" min="0" step="0.01" value="0" inputmode="decimal">
+          <input autocomplete="off" type="number" id="annualBonus" min="0" step="0.01" value="0" inputmode="decimal">
         </div>
         <div class="row">
           <div class="field">
             <label for="days">Severance days per year of service</label>
-            <input type="number" id="days" min="0" step="0.5" value="14" inputmode="decimal">
+            <input autocomplete="off" type="number" id="days" min="0" step="0.5" value="14" inputmode="decimal">
           </div>
           <div class="field">
             <label for="daysExtra">Extra severance days per year</label>
-            <input type="number" id="daysExtra" min="0" step="0.5" value="16" inputmode="decimal">
+            <input autocomplete="off" type="number" id="daysExtra" min="0" step="0.5" value="16" inputmode="decimal">
           </div>
         </div>
         <div class="field">
           <label for="extra">Additional severance (€)</label>
-          <input type="number" id="extra" min="0" step="0.01" value="6648" inputmode="decimal">
+          <input autocomplete="off" type="number" id="extra" min="0" step="0.01" value="6648" inputmode="decimal">
         </div>
         <label class="check" for="extraFree">
-          <input type="checkbox" id="extraFree">
+          <input autocomplete="off" type="checkbox" id="extraFree">
           <span>Take the additional severance out of IRS and Social Security</span>
         </label>
       </fieldset>
@@ -626,7 +630,7 @@ try {
         <div class="row">
           <div class="field">
             <label for="situation">IRS withholding table</label>
-            <select id="situation">
+            <select autocomplete="off" id="situation">
               <option value="single0" selected>Single, no dependents</option>
               <option value="singleDeps">Single, with dependents</option>
               <option value="marriedTwo">Married, two incomes</option>
@@ -635,31 +639,31 @@ try {
           </div>
           <div class="field">
             <label for="deps">Dependents</label>
-            <input type="number" id="deps" min="0" step="1" value="0" inputmode="numeric">
+            <input autocomplete="off" type="number" id="deps" min="0" step="1" value="0" inputmode="numeric">
           </div>
         </div>
         <div class="row">
           <div class="field">
             <label for="depsDis">Dependents with a disability of 60% or more</label>
-            <input type="number" id="depsDis" min="0" step="1" value="0" inputmode="numeric">
+            <input autocomplete="off" type="number" id="depsDis" min="0" step="1" value="0" inputmode="numeric">
           </div>
           <div class="field">
             <label for="disFactor">Disability factor</label>
-            <input type="number" id="disFactor" min="0" max="6" step="1" value="0" inputmode="numeric">
+            <input autocomplete="off" type="number" id="disFactor" min="0" max="6" step="1" value="0" inputmode="numeric">
           </div>
         </div>
         <span class="hint" style="display:block;margin:-4px 0 16px;">Each of them adds €84.82 a month to the amount deducted from the withholding (€42.41 if married with two incomes). Your employer can multiply it by up to 3, or up to 6 if married with two incomes. Use a factor of at least 1 for the reduction to apply.</span>
         <label class="check" for="nov" id="novRow">
-          <input type="checkbox" id="nov">
+          <input autocomplete="off" type="checkbox" id="nov">
           <span>Paid in November 2026 (IRS withholding is halved this month)</span>
         </label>
         <label class="check" for="jovem">
-          <input type="checkbox" id="jovem">
+          <input autocomplete="off" type="checkbox" id="jovem">
           <span><strong>IRS Jovem</strong>: the employee is 35 or under and asked the employer to apply it</span>
         </label>
         <div class="field">
           <label for="jovemYear">IRS Jovem year of income</label>
-          <select id="jovemYear" disabled>
+          <select autocomplete="off" id="jovemYear" disabled>
             <option value="1">1st year (100% exempt)</option>
             <option value="0.75" selected>2nd to 4th year (75% exempt)</option>
             <option value="0.5">5th to 7th year (50% exempt)</option>
@@ -1245,8 +1249,8 @@ try {
     el.innerHTML =
       '<div class="cal-head">' +
         '<button type="button" class="cal-nav" data-nav="-1" aria-label="Previous month">&#8249;</button>' +
-        '<select class="cal-month" aria-label="Month"></select>' +
-        '<select class="cal-year" aria-label="Year"></select>' +
+        '<select autocomplete="off" class="cal-month" aria-label="Month"></select>' +
+        '<select autocomplete="off" class="cal-year" aria-label="Year"></select>' +
         '<button type="button" class="cal-nav" data-nav="1" aria-label="Next month">&#8250;</button>' +
       '</div><div class="cal-grid"></div>';
     var ms = el.querySelector(".cal-month"), ys = el.querySelector(".cal-year");
@@ -1451,7 +1455,22 @@ try {
     ids.forEach(function (id) { var el = $(id); if (el.type === "checkbox") el.checked = !!s[id]; else el.value = s[id]; });
     render();
   }
-  DEFAULTS = readState();
+  function defaultState() {
+    var s = {};
+    ids.forEach(function (id) {
+      var el = $(id);
+      if (el.type === "checkbox") { s[id] = el.defaultChecked; return; }
+      if (el.tagName === "SELECT") {
+        var v = el.options[0].value;
+        for (var i = 0; i < el.options.length; i++) { if (el.options[i].defaultSelected) { v = el.options[i].value; break; } }
+        s[id] = v;
+        return;
+      }
+      s[id] = el.defaultValue;
+    });
+    return s;
+  }
+  DEFAULTS = defaultState();
   var undoState = null, undoTimer = null, clearBtn = $("clearAll");
   function resetClear() {
     undoState = null;
@@ -1466,6 +1485,10 @@ try {
     undoTimer = setTimeout(resetClear, 8000);
   });
   document.addEventListener("input", function () { if (undoState) resetClear(); });
+
+  // Always start blank: on load, on refresh, and when the browser restores the page from its back/forward cache.
+  writeState(DEFAULTS);
+  window.addEventListener("pageshow", function () { resetClear(); writeState(DEFAULTS); });
 
   // Print / Save as PDF
   $("printBtn").addEventListener("click", function () {
