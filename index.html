@@ -89,7 +89,7 @@ try {
   .explain summary { cursor: pointer; padding: 14px 18px; font-weight: 600; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .explain summary::-webkit-details-marker { display: none; }
   .explain summary::after { content: ""; flex: none; width: 8px; height: 8px; margin-right: 4px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform 0.15s; }
-  .explain[open] summary::after { transform: rotate(-135deg); }
+  .explain[open] > summary::after { transform: rotate(-135deg); }
   .explain .body { padding: 4px 18px 20px; border-top: 1px solid var(--line); }
   .explain h3 { margin: 18px 0 0; font-size: 15px; font-weight: 600; }
   .explain dl { margin: 10px 0 0; display: grid; grid-template-columns: minmax(150px, 220px) minmax(0, 1fr); gap: 0; font-size: 14.5px; border-top: 1px solid var(--line); }
@@ -103,6 +103,12 @@ try {
   .explain dd ul { margin: 0; padding-left: 18px; }
   .explain dd li { margin: 0 0 5px; }
   .explain dd li:last-child { margin-bottom: 0; }
+  .faq-item { border-bottom: 1px solid var(--line); }
+  .faq-item:last-child { border-bottom: 0; }
+  .explain .faq-item summary { padding: 13px 0; font-size: 15px; font-weight: 500; }
+  .faq-item[open] > summary::after { transform: rotate(-135deg); }
+  .faq-item p { margin: 0 0 14px; max-width: 70ch; font-size: 14.5px; line-height: 1.55; color: var(--muted); }
+  .faq .body { padding-top: 0; }
   @media (max-width: 640px) {
     .explain dl { grid-template-columns: minmax(0, 1fr); }
     .explain dt { padding: 11px 0 0; border-bottom: 0; }
@@ -363,7 +369,7 @@ try {
 <div class="notice" role="note">
   <div class="inner">
     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
-    <span>These figures are estimates. If something looks wrong or you have a suggestion, please reach out to <strong>Sérgio R.</strong> on Discord.</span>
+    <span>These figures are estimates. If something looks wrong or you have a suggestion, please reach out on <strong>Discord</strong>.</span>
   </div>
 </div>
 <div class="wrap">
@@ -392,9 +398,13 @@ try {
   </header>
 
   <details class="explain updates">
-    <summary><span>Updates by version</span><span class="ver">Current version 4.4, updated 18/11/2026 at 22:28</span></summary>
+    <summary><span>Updates by version</span><span class="ver">Current version 4.5, updated 19/11/2026 at 11:09</span></summary>
     <div class="body">
       <dl>
+        <dt>Version 4.5</dt>
+        <dd><ul>
+          <li>“Frequently asked questions” drop-down with answers on severance, tax, vacation, the Christmas bonus, training hours, IRS Jovem, the Lawyer’s fee, garden leave and unemployment benefit.</li>
+        </ul></dd>
         <dt>Version 4.4</dt>
         <dd><ul>
           <li>The page starts blank on every refresh and when returning to it with the browser buttons. Browser autofill is turned off for all fields.</li>
@@ -544,6 +554,60 @@ try {
         <dt>After deductions</dt>
         <dd>Before deductions − Social Security − IRS − lawyer’s fee.</dd>
       </dl>
+    </div>
+  </details>
+
+  <details class="explain faq">
+    <summary>Frequently asked questions</summary>
+    <div class="body">
+      <details class="faq-item">
+        <summary>How is my severance calculated?</summary>
+        <p>One day of pay is your monthly pay ÷ 30. That is multiplied by 14 + 16 days for each year of service, and by your years of service. Part-years count proportionally. In practice this equals one month of pay for each year served.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What will I receive besides the severance?</summary>
+        <p>The additional severance amount, your unused vacation days, the training hours you are owed, the holiday and Christmas bonus for the part of the year you worked, and the annual bonus. Each one is shown as its own line in the final account.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Is the severance taxed?</summary>
+        <p>Severance from a collective dismissal carries no Social Security. For IRS, it is tax-free up to your average monthly pay × years of service, and only the part above that is taxed. The additional severance may also be tax-free, depending on how it is set up. The reps will check this with the lawyer, and the checkbox “Take the additional severance out of IRS and Social Security” shows the result without tax on it.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Why is the IRS on my final payment so high?</summary>
+        <p>IRS is withheld on the whole month’s pay. Large one-off amounts such as the annual bonus or vacation pay are added to the month’s salary, so the month lands in a higher bracket and a higher rate applies. This is only an advance: the final tax is settled in your annual IRS return.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How are unused vacation days paid?</summary>
+        <p>Each day is worth your monthly pay × 12 ÷ 260. If your contract ends in 2027, add the 22 vacation days that vest on 1 January 2027 to “Vacation days left”, together with any unused days from this year.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What happens to my Christmas bonus if I leave in December?</summary>
+        <p>The Christmas bonus is paid with the November salary, so for an end date in December only the days worked in December are calculated. For an end date in 2027 it is the pro-rata amount for 2027.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How many training hours am I owed?</summary>
+        <p>You are entitled to 40 hours of training a year, and the hours not provided are paid when the contract ends. The calculation looks at the last 3 years (up to 120 hours), minus the training you already completed. Each hour is paid at your monthly pay × 12 ÷ (52 × weekly hours). To know how many hours you are owed, check the provided Excel document on Discord.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Does IRS Jovem apply to me?</summary>
+        <p>IRS Jovem is an IRS exemption for people aged 35 or under, for up to 10 years: 100% in the first year, 75% in years 2 to 4, 50% in years 5 to 7 and 25% in years 8 to 10. In the calculator you tick the option and choose your year. It reduces the IRS on the pay items only, not on the severance, and Social Security does not change.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What is the Lawyer’s fee?</summary>
+        <p>A fixed 2.5% of the total package before deductions. It is shown as a separate deduction and does not change the Social Security or IRS amounts.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Will there be garden leave?</summary>
+        <p>Garden leave means being released from work while still being paid. It is on the table, but it is not known yet who will benefit from it.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Will I receive unemployment benefit?</summary>
+        <p>Everyone will be given the Social Security unemployment papers. Whether you actually receive the benefit depends on each person meeting the Social Security requirements, so it is decided case by case.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How exact is the calculator?</summary>
+        <p>It gives estimates, not legal or tax advice. It uses the 2026 tax tables and does not apply the statutory caps in article 366 of the Labour Code. If something looks wrong or you have a suggestion, reach out to Sérgio R. on Discord.</p>
+      </details>
     </div>
   </details>
 
